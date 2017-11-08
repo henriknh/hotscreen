@@ -4,7 +4,7 @@ class Lobby(object):
         self.gameQueue = []
         ## Ready? player ready?
         self.gameEnoughPlayers = False
-        
+
 
     ## korta ner lite??? ..
     def addPlayerLobby(self, name):
@@ -41,7 +41,7 @@ class Lobby(object):
     def disconnectFromLobby(self, name):
         self.lobbyQueue.remove(name)
         return "player: " + name + " was removed from queue"
-        
+
 ##  Anslut spelare till game (1a från lobby till game)
 ##  Kolla antal platser?
     def connectToGame(self):
@@ -62,16 +62,17 @@ class Lobby(object):
         for i in range(playersMax - len(self.getGameQueue())):
             if len(self.getLobbyQueue()) > 0:
                 self.connectToGame()
-        
+
     ## Clear the game queue (Kallas när spelet är slut?)
     def clearGameQueue():
         self.gameQueue.clear()
 
-    
+
 a = Lobby()
-for i in range(4):
+for i in range(10):
     a.connectToLobby(str(i))
-print (a.getFirstPlayerLobby())
+print(a.getLobbyQueue())
 
 a.fillGame(2,4)
 print(a.getGameQueue())
+print(a.getLobbyQueue())
