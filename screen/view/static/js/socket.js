@@ -2,7 +2,7 @@ console.log("socket");
 
 
 
-var socket = io.connect('http://localhost:5050');
+var socket = io.connect('http://130.240.93.75:5050');
 
 
 socket.on('connect', function() {
@@ -17,22 +17,16 @@ socket.on('broadcast', function(data) {
     }
 });
 
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+var startPing, stopPing;
+function ping() {
+    startPing = new Date().getTime();
+    socket.emit('ping', {});
 }
+setInterval(function(){
+    ping();
+}, 2000);
 
-async function printLatency() {
-  await sleep(2000);
-
-  let total = 0;
-  for(l of latency) {
-      total += l;
-  }
-
-  console.log('Latency:', Math.round(total/latency.length),'ms');
-
-  printLatency();
-}
-
-printLatency();
+socket.on('ping', function(data) {
+    stopPing = new Date().getTime();
+    console.log(stopPing-startPing);
+});

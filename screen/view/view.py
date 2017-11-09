@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from threading import Thread
-import os, time
+import os, time, psutil, json
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -24,28 +24,38 @@ def play():
 
 @app.route("/status")
 def status():
-    return "Hello Status!"
+    data = {
+        'cpu': psutil.cpu_percent(interval=1),
+        'memory': psutil.virtual_memory(),
+        'network': psutil.net_io_counters(pernic=True),
+        'temperature': psutil.sensors_temperatures(),
+        'fans': psutil.sensors_fans()
+    }
+    return json.dumps(data)
 
 @socketio.on('my event')
 def test_message(message):
     print(message)
     emit('my response', {'data': 'got it!'})
 
+@socketio.on('ping')
+def test_message(message):
+    emit('ping', message)
+
 class View(object):
-    """docstring for View."""
+
     def __init__(self):
         super(View, self).__init__()
 
         Thread(target = self.startFlask, args = ()).start()
 
-        self.openBrowser('localhost:5050/lobby')
+        #self.openBrowser('localhost:5050/lobby')
 
-        i = 0
-        while True:
-            print(i)
-            time.sleep(0.03333)
-            socketio.emit('broadcast', {'data': i, 'time':time.time()*1000})
-            i += 1
+    def exit(self):
+        pass
+
+    def emit(self, topic, message):
+        socketio.emit(topic, message)
 
     def startFlask(self):
         #app.run(host="0.0.0.0", port=5050)
