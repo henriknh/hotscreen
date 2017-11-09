@@ -1,9 +1,13 @@
 class Lobby(object):
-    def __init__(self):
+    def __init__(self, view):
+
         self.lobbyQueue = []
         self.gameQueue = []
         ## Ready? player ready?
         self.gameEnoughPlayers = False
+
+    def exit(self):
+        print('Exit Lobby')
 
 
     ## korta ner lite??? ..
@@ -66,13 +70,3 @@ class Lobby(object):
     ## Clear the game queue (Kallas när spelet är slut?)
     def clearGameQueue():
         self.gameQueue.clear()
-
-
-a = Lobby()
-for i in range(10):
-    a.connectToLobby(str(i))
-print(a.getLobbyQueue())
-
-a.fillGame(2,4)
-print(a.getGameQueue())
-print(a.getLobbyQueue())

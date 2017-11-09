@@ -1,13 +1,22 @@
-from flask import Flask, render_template
+from game import *
+from lobby import *
+
+from gevent import monkey
+monkey.patch_all()
+
+from flask import Flask, render_template, request
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from threading import Thread
-import os, time, psutil, json
+import os, time, psutil, json, logging
 from flask_socketio import SocketIO, emit
+from gevent import monkey, sleep
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hotsecret!'
-socketio = SocketIO(app, engineio_logger=False, ping_interval=0.005)
+socketio = SocketIO(app, engineio_logger=False, ping_timeout=5, ping_interval=1, async_mode="eventlet")
 
 @app.route("/")
 def index():
@@ -42,25 +51,44 @@ def test_message(message):
 def test_message(message):
     emit('ping', message)
 
+@socketio.on('connect')
+def on_connect():
+    print('%s connected' % request.sid)
+    view.getLobby().connectToLobby(request.sid)
+    broadcast('queue_updated', view.getLobby().getLobbyQueue())
+
+@socketio.on('disconnect')
+def on_disconnect():
+    print('%s disconnected' % request.sid)
+    view.getLobby().disconnectFromLobby(request.sid)
+    broadcast('queue_updated', view.getLobby().getLobbyQueue())
+
+def broadcast(topic, message):
+    socketio.emit(topic, json.dumps(message))
+
+
 class View(object):
 
+    lobby = None
+    game = None
+
     def __init__(self):
-        super(View, self).__init__()
-
-        Thread(target = self.startFlask, args = ()).start()
-
         #self.openBrowser('localhost:5050/lobby')
 
-    def exit(self):
-        pass
+        self.game = Game(self)
+        self.lobby = Lobby(self)
+
+    def getLobby(self):
+        return self.lobby
+
+    def getGame(self):
+        return self.game
 
     def emit(self, topic, message):
-        socketio.emit(topic, message)
+        broadcast(topic, message)
 
     def startFlask(self):
-        #app.run(host="0.0.0.0", port=5050)
         socketio.run(app, host='0.0.0.0', port=5050)
-
 
     def openBrowser(self, url):
         opts = Options()
@@ -69,3 +97,15 @@ class View(object):
         #opts.add_argument("--kiosk") # Fullscreen mode
         driver = webdriver.Chrome(chrome_options=opts, executable_path=os.getcwd()+"/chromedriver")
         driver.get(url)
+
+    def sleep(self, time):
+        sleep(1)
+
+
+
+def startFlask():
+    socketio.run(app, host='0.0.0.0', port=5050)
+
+view = View()
+view.startFlask()
+#socketio.start_background_task(startFlask)
