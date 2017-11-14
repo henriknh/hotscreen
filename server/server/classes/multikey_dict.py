@@ -63,9 +63,9 @@ class MultiKeyDictionary(object):
 
     def has(self, key):
         if key in self.keys:
-            return true
+            return True
         else:
-            return false
+            return False
 
     def str(self): # create string representation of dictionary
         value_list = self.values.keys()
