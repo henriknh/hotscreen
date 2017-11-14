@@ -25,7 +25,8 @@ def startplaying(ID):
         address = deviceDict[ID] # return parameter, might no be in dictionary
     except KeyError:
         return "Couldn't find device"
-    return render_template('play.html', address=address)
+    ip, port = address
+    return render_template('play.html', ip=ip, port=port)
 
 @app.route('/register/<string:ip>/<int:port>', methods=['POST'])
 # POST since will add new information to the server, update list of devices
