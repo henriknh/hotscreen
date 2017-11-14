@@ -1,4 +1,5 @@
 from server import app
+from flask import request
 
 import pyqrcode
 import pickle
