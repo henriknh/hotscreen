@@ -25,7 +25,7 @@ def startplaying(ID):
         address = deviceDict[ID] # return parameter, might no be in dictionary
     except KeyError:
         return "Couldn't find device"
-    return render_template('play.html')
+    return render_template('play.html', address=address)
 
 @app.route('/register/<string:ip>/<int:port>', methods=['POST'])
 # POST since will add new information to the server, update list of devices
@@ -47,14 +47,20 @@ def createQR(deviceID):
     qr = pyqrcode.create(url) # qr is a Object of type bytes
     return qr
 
-def getCodeID(): # should check so not already in dictionary
+def getCodeID():
     s = ""
     s = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
-    try:
-        deviceDict[s]
-        getCode()
-    except KeyError:
-        return s # doesn't already
+    if deviceDict.has(s): # key already exist
+        i = 0
+        while i < 5: # try 5 time for new code
+            s = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+            if deviceDict.has(s): # again, code exists
+                i += 1
+            else:
+                return s
+        return "Couldn't find a new code"
+    else:
+        return s
 
 def getHashID(address):
     string = '%s:%d' % address
