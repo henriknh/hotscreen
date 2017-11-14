@@ -8,9 +8,8 @@ import random
 import string
 
 from server.classes.multikey_dict import *
-
-deviceDict = MultiKeyDictionary() # need db to save it
-MAX_KEYS = 2
+from server import MAX_KEYS # max keys for one device
+from server import deviceDict # import the dictionary
 
 @app.route('/')
 def index():
@@ -39,9 +38,8 @@ def register(ip, port):
         addDevice(hashID, address) # add the hash id
         addDevice(codeID, address) #add digit code
         qr = createQR(hashID)
-        #pickled_qr = pickle.dumps(qr)
         msg = { 'qr': qr, 'code': codeID, 'hash': hashID }
-        response = pickle.dumps(msg)
+        response = pickle.dumps(msg) # should also pickle the device dictionary
         return response
 
 def createQR(deviceID):
