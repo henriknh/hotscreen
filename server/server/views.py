@@ -10,6 +10,7 @@ import string
 from server.classes.multikey_dict import *
 
 deviceDict = MultiKeyDictionary() # need db to save it
+MAX_KEYS = 2
 
 @app.route('/')
 def index():
@@ -35,7 +36,7 @@ def register(ip, port):
         address = (ip, port) #should info add to list
         hashID = getHashID(address) # get an ID which depends on the address
         codeID = getCodeID()
-        addDevice(hashID, address) # add hash
+        addDevice(hashID, address) # add the hash id
         addDevice(codeID, address) #add digit code
         qr = createQR(hashID)
         #pickled_qr = pickle.dumps(qr)
@@ -68,6 +69,15 @@ def getHashID(address):
     hex_dig = hash_obj.hexdigest()
     return hex_dig
 
-def addDevice(deviceID, address):
-    deviceDict[deviceID] = address
+def addDevice(deviceID, address): # first, need to check so not an update
+    try:
+        if len(deviceDict.values[address]) < MAX_KEYS: # ok to add
+            deviceDict[deviceID] = address
+            return
+        else: # update already existing keys instead of adding new one
+            keys = deviceDict.values[address]
+            for key in keys:
+                deviceDict[key] = address
+    except KeyError:
+        deviceDict[deviceID] = address
     return
