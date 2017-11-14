@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from server import app
 
 def start():
