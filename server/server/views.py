@@ -39,7 +39,8 @@ def register(ip, port):
         addDevice(codeID, address) #add digit code
         qr = createQR(hashID)
         msg = { 'qr': qr, 'code': codeID, 'hash': hashID }
-        response = pickle.dumps(msg) # should also pickle the device dictionary
+        response = pickle.dumps(msg)
+        saveDictionary()
         return response
 
 def createQR(deviceID):
@@ -79,3 +80,8 @@ def addDevice(deviceID, address): # first, need to check so not an update
     except KeyError:
         deviceDict[deviceID] = address
     return
+
+def saveDictionary():
+    with open('deviceDictionary.pickle', 'wb') as handle:
+        pickle.dump(deviceDict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    

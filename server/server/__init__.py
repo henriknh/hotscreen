@@ -3,7 +3,16 @@ app = Flask(__name__)
 
 from server.classes.multikey_dict import *
 
+import pickle
+
 MAX_KEYS = 2
-deviceDict = MultiKeyDictionary()
+
+def loadDictionary():
+    with open('deviceDictionary.pickle', 'rb') as handle:
+        return pickle.load(handle)
+
+deviceDict = loadDictionary()
 
 import server.views
+
+
