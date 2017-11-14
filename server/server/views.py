@@ -59,8 +59,7 @@ def getCodeID():
             else:
                 return s
         return "Couldn't find a new code"
-    else:
-        return s
+    return s
 
 def getHashID(address):
     string = '%s:%d' % address
