@@ -1,72 +1,71 @@
-class Lobby(object):
-    def __init__(self, view):
+from queues import *
 
-        self.lobbyQueue = []
-        self.gameQueue = []
-        ## Ready? player ready?
-        self.gameEnoughPlayers = False
+class Lobby(object):
+
+    minPlayers = 1
+    maxPlayers = 2
+
+    def __init__(self, view):
+        self.view = view
+
+        self.lobby = Queue()
+        self.game = Queue()
 
     def exit(self):
         print('Exit Lobby')
 
+    '''
+        Lobby Players
+    '''
 
-    ## korta ner lite??? ..
-    def addPlayerLobby(self, name):
-        self.lobbyQueue.append(name)
-    def getFirstPlayerLobby(self):
-        if len(self.lobbyQueue) > 0:
-            return self.lobbyQueue[0]
-        return "-1"
-    def getLobbyQueue(self):
-        return self.lobbyQueue
-    def removeFirstPlayerLobby(self):
-        self.lobbyQueue.pop(0)
-
-    def addPlayerGame(self, name):
-        self.gameQueue.append(name)
-    def getFirstPlayerGame(self):
-        if len(self.gameQueue) > 0:
-            return self.gameQueue[0]
-        return "Lobby is empty"
-    def getGameQueue(self):
-        return self.gameQueue
-    def removeFirstPlayerGame(self):
-        self.gameQueue.pop(0)
-
-
-##  Spelare ansluter till lobby
     def connectToLobby(self, name):
-        for p in self.lobbyQueue:
-            if p == name:
-                return "Player is already in queue"
-        self.addPlayerLobby(name)
-        return "player added to queue"
+        if self.lobby.exists(name):
+            return False
+        self.lobby.append(name)
+        self.view.checkEnoughPlayers()
+        self.view.broadcast('queue_updated', self.getLobbyQueue(), '/screen')
+        return True
 
     def disconnectFromLobby(self, name):
-        self.lobbyQueue.remove(name)
-        return "player: " + name + " was removed from queue"
+        return self.lobby.remove(name)
+        self.view.broadcast('queue_updated', self.getLobbyQueue(), '/screen')
 
-##  Anslut spelare till game (1a från lobby till game)
-##  Kolla antal platser?
-    def connectToGame(self):
-        tmp = self.getFirstPlayerLobby() ## Behövs inte egentligen
-        self.removeFirstPlayerLobby()
-        self.addPlayerGame(tmp)
-        return "player: " + tmp + " was added to the game queue"
+    def getLobbySize(self):
+        return self.lobby.size()
 
-    def disconnectFromGame(self, name):
-        self.lobbyQueue.remove(name)
-        return "player: " + name + " was removed from queue"
+    def getLobbyQueue(self):
+        return self.lobby.getQueue()
 
-    ## Kolla antal spelare, lägg till fler?
-    def fillGame(self, playersMin, playersMax):
-        for i in range(playersMin - len(self.getGameQueue())):
-            if len(self.getLobbyQueue()) > 0:
-                self.connectToGame()
-        for i in range(playersMax - len(self.getGameQueue())):
-            if len(self.getLobbyQueue()) > 0:
-                self.connectToGame()
+    '''
+        Game Players
+    '''
 
-    ## Clear the game queue (Kallas när spelet är slut?)
-    def clearGameQueue():
-        self.gameQueue.clear()
+    def isEnough(self):
+        if self.getLobbySize() >= self.minPlayers:
+            return True
+        return False
+
+    def fillGame(self):
+        if not self.isEnough():
+            return False
+
+        nrOfPlayers = self.getLobbySize()
+
+        if(nrOfPlayers > self.maxPlayers):
+            nrOfPlayers = self.maxPlayers
+
+        for i in range(0, nrOfPlayers):
+            player = self.lobby.pop()
+            self.game.append(player)
+        self.view.broadcast('queue_updated', self.getLobbyQueue(), '/screen')
+        return True
+
+    def gameEnded(self):
+        for i in range(0, self.game.size()):
+            self.game.pop()
+        self.view.checkEnoughPlayers()
+        self.view.broadcast('queue_updated', self.getLobbyQueue(), '/screen')
+        return True
+
+    def getGameQueue(self):
+        return self.game.getQueue()

@@ -1,3 +1,128 @@
-body {
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One');
+
+html,body {
+    width: 100%;
+    height: 100%;
     background-color: #ccc;
+    margin: 0;
+    padding: 0;
+    background-color: #a6f1a6;
+    font-family: 'Fredoka One', cursive;
+}
+
+
+
+#lobby {
+    display: block;
+    font-size: 2em;
+}
+#lobby .title {
+    width: 100%;
+    font-size: 4em;
+    text-align: center;
+    position: absolute;
+    top: 5%;
+    left: 0;
+    text-shadow: 1px 1px 3px black;
+}
+#lobby .topleft {
+    height: 80vh;
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+#lobby div .top {
+    margin-top: 40%;
+}
+#lobby .topright {
+    height: 80vh;
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+#lobby .or {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 45%;
+}
+#lobby .bottom {
+    height: 20vh;
+    width: 100%;
+    float: left;
+    text-align: center;
+}
+#lobby #countdown {
+    width: 100%;
+    font-size: 5em;
+    position: absolute;
+    text-align: center;
+    top: 65%;
+}
+#countdown:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+#lobby .code {
+    display: inline-block;
+    border: 3px solid black;
+    letter-spacing: 20px;
+    margin-top: 20px;
+    padding: 20px 0px 20px 20px;
+    border-radius: 10px;
+    font-size: 2em;
+    background-color: #f9f2ef;
+}
+#lobby #queue {
+    position: relative;
+    top: 50%;
+}
+
+#game {
+    display: none;
+}
+#game .title {
+    z-index: 1;
+    font-size: 3.5em;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-shadow: 1px 1px 3px black;
+}
+#game .connect {
+    z-index: 1;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+#game .connect .code {
+    text-align: center;
+    display: inline;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+    letter-spacing: 10px;
+    padding: 10px 5px 10px 10px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+
+    border: 3px solid black;
+    border-radius: 10px;
+    font-size: 2em;
+    background-color: #f9f2ef;
+}
+#game .connect .or {
+    line-height: 1.5em;
+    font-size: 2em;
+    text-align: center;
+}
+#game .connect .qr {
+    width: 20vh;
+}
+#game #gameBoard {
+    height: 100%;
+    width: 100%;
+    position: absolute;
 }
