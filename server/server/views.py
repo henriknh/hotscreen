@@ -1,5 +1,15 @@
 from server import app
 
+import pyqrcode
+import pickle
+import hashlib
+import random
+import string
+
+from server.classes.multikey_dict import *
+
+deviceDict = MultiKeyDictionary() # need db to save it
+
 @app.route('/')
 def index():
     return 'Index page'
