@@ -1,5 +1,5 @@
 from server import app
-from flask import request
+from flask import request, render_template, url_for
 
 import pyqrcode
 import pickle
@@ -13,7 +13,7 @@ deviceDict = MultiKeyDictionary() # need db to save it
 
 @app.route('/')
 def index():
-    return 'Index page'
+    return render_template('index.html')
 
 @app.route('/devices')
 def getDevices():
@@ -25,7 +25,7 @@ def startplaying(ID):
         address = deviceDict[ID] # return parameter, might no be in dictionary
     except KeyError:
         return "Couldn't find device"
-    return ID # return template with parameters, go back one step
+    return render_template('play.html')
 
 @app.route('/register/<string:ip>/<int:port>', methods=['POST'])
 # POST since will add new information to the server, update list of devices
