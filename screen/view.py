@@ -28,7 +28,7 @@ class View(object):
     state = 'lobby'
 
     def __init__(self):
-        #self.openBrowser('localhost:5050/lobby')
+        self.openBrowser('localhost:5050/lobby')
 
         self.game = Game(self)
         self.lobby = Lobby(self)
@@ -63,7 +63,7 @@ class View(object):
 
     def openBrowser(self, url):
         opts = Options()
-        opts.binary_location = "/usr/bin/google-chrome-stable"
+        opts.binary_location = "/usr/bin/chromium-browser"
         opts.add_argument("disable-infobars")
         #opts.add_argument("--kiosk") # Fullscreen mode
         driver = webdriver.Chrome(chrome_options=opts, executable_path=os.getcwd()+"/chromedriver")
