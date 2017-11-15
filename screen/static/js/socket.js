@@ -1,5 +1,5 @@
-var socket = io.connect('ws://localhost:5050/screen');
-var socket_c = io.connect('ws://localhost:5050/controller');
+var socket = io.connect('ws://130.240.5.92:5050/screen');
+var socket_c = io.connect('ws://130.240.5.92:5050/controller');
 
 socket.on('connect', function() {
     console.log('connect');
