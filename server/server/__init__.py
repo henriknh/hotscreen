@@ -13,6 +13,4 @@ def loadDictionary():
 
 deviceDict = loadDictionary()
 
-import server.views
-
-
+from server import views
