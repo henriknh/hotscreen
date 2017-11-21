@@ -1,11 +1,11 @@
 from server import app
 from flask import request, render_template, url_for
 
-import pyqrcode
 import pickle
 import hashlib
 import random
 import string
+import qrcode
 
 from server.classes.multikey_dict import *
 from server import MAX_KEYS # max keys for one device
@@ -45,7 +45,14 @@ def register(ip, port):
 
 def createQR(deviceID):
     url = 'http://130.240.5.87/play/' + deviceID
-    qr = pyqrcode.create(url) # qr is a Object of type bytes
+    qr = qrcode.QRCode(
+        version = 1,
+        error_correction = qrcode.constants.ERROR_CORRECT_H,
+        box_size = 10,
+        border = 4,
+    )
+    qr.add_data(url)
+    qr.make(fit=True)
     return qr
 
 def getCodeID():
