@@ -2,8 +2,17 @@
 <html lang="en">
 <head>
     <title>Hot Screen</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='piConnect.js') }}"></script>
 </head>
 <body>
     <h2>Play!</h2>
+    <h2 id= adress data-adress= {{ address }}></h2>
+    <button id="button-up" onClick = "moveUp()" >Up</button>
+    <button id="button-down" onClick = "moveDown()">Down</button>
+
 </body>
 </html>
