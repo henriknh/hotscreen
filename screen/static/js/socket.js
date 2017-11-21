@@ -1,36 +1,60 @@
-console.log("socket");
-
-
-
-var socket = io.connect('ws://130.240.93.75:5050');
-
-
-
-function makeid() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  for (var i = 0; i < 5; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
-}
-
+var socket = io.connect('ws://130.240.5.92:5050/screen');
+var socket_c = io.connect('ws://130.240.5.92:5050/controller');
 
 socket.on('connect', function() {
-    socket.emit('new_player', makeid());
+    console.log('connect');
 });
 
 socket.on('disconnect', function() {
     console.log('disconnect');
 });
 
-socket.on('gamestate', function(data) {
-    console.log(data);
+socket.on('lobbystate', function(lobbystate) {
+    lobbystate = JSON.parse(lobbystate);
+    if(lobbystate == "lobby") {
+        document.getElementById('lobby').style.display='block';
+        document.getElementById('game').style.display='none';
+    } else if (lobbystate == "game") {
+        document.getElementById('lobby').style.display='none';
+        document.getElementById('game').style.display='block';
+    }
 });
 
-socket.on('queue_updated', function(queue) {
+window.onload = function(e){
+    canvasResize();
+};
 
+window.onresize = function(e) {
+    canvasResize();
+};
+
+var canvas;
+var ctx;
+function canvasResize() {
+    console.log(window.innerWidth);
+    console.log(window.innerHeight);
+    canvas = document.getElementById("gameBoard");
+    ctx = canvas.getContext("2d");
+    ctx.canvas.width  = window.innerWidth;
+    ctx.canvas.height = window.innerHeight;
+}
+
+let x = 0;
+socket.on('gamestate', function(state) {
+    console.log(state);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if(x > 50)
+        x = 0;
+    x += 1;
+    ctx.fillRect(x,50,150,100);
+    ctx.fillRect(x*2,200,150,100);
+    ctx.fillRect(x*3,350,150,100);
+});
+
+
+socket.on('queue_updated', function(queue) {
     let json = JSON.parse(queue);
 
     let html = '';
@@ -38,7 +62,7 @@ socket.on('queue_updated', function(queue) {
         html += '<p>'+item+'</p>';
     }
 
-    document.getElementById("queue").innerHTML = html;
+    document.getElementById("queue").innerHTML = "There are "+ json.length +" in queue...";
 });
 
 var startPing, stopPing;
@@ -54,4 +78,12 @@ setInterval(function(){
 socket.on('ping', function(data) {
     stopPing = new Date().getTime();
     console.log((stopPing-startPing)+ ' ms');
+});
+
+
+socket.on('preplay_countdown', function(countdown) {
+    if(countdown == 0) {
+        countdown = "Go!";
+    }
+    document.getElementById("countdown").innerHTML = countdown;
 });

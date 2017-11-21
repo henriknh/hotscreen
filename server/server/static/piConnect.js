@@ -3,8 +3,9 @@ var ip = 'ws://' + getIP();
 var socket = io.connect(ip);
 
 function getIP() {
-    var ip = document.getElementById('adress');
-    return ip;
+    var ip = document.getElementById('ip');
+    var port = document.getElementById('port');
+    return ip+port;
 }
 
 

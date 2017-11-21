@@ -8,8 +8,8 @@ import random
 import string
 
 from server.classes.multikey_dict import *
-
-deviceDict = MultiKeyDictionary() # need db to save it
+from server import MAX_KEYS # max keys for one device
+from server import deviceDict # import the dictionary
 
 @app.route('/')
 def index():
@@ -25,7 +25,8 @@ def startplaying(ID):
         address = deviceDict[ID] # return parameter, might no be in dictionary
     except KeyError:
         return "Couldn't find device"
-    return render_template('play.html', address=address)
+    ip, port = address
+    return render_template('play.html', ip=ip, port=port)
 
 @app.route('/register/<string:ip>/<int:port>', methods=['POST'])
 # POST since will add new information to the server, update list of devices
@@ -34,12 +35,12 @@ def register(ip, port):
         address = (ip, port) #should info add to list
         hashID = getHashID(address) # get an ID which depends on the address
         codeID = getCodeID()
-        addDevice(hashID, address) # add hash
+        addDevice(hashID, address) # add the hash id
         addDevice(codeID, address) #add digit code
         qr = createQR(hashID)
-        #pickled_qr = pickle.dumps(qr)
         msg = { 'qr': qr, 'code': codeID, 'hash': hashID }
         response = pickle.dumps(msg)
+        saveDictionary()
         return response
 
 def createQR(deviceID):
@@ -59,8 +60,7 @@ def getCodeID():
             else:
                 return s
         return "Couldn't find a new code"
-    else:
-        return s
+    return s
 
 def getHashID(address):
     string = '%s:%d' % address
@@ -68,6 +68,20 @@ def getHashID(address):
     hex_dig = hash_obj.hexdigest()
     return hex_dig
 
-def addDevice(deviceID, address):
-    deviceDict[deviceID] = address
+def addDevice(deviceID, address): # first, need to check so not an update
+    try:
+        if len(deviceDict.values[address]) < MAX_KEYS: # ok to add
+            deviceDict[deviceID] = address
+            return
+        else: # update already existing keys instead of adding new one
+            keys = deviceDict.values[address]
+            for key in keys:
+                deviceDict[key] = address
+    except KeyError:
+        deviceDict[deviceID] = address
     return
+
+def saveDictionary():
+    with open('deviceDictionary.pickle', 'wb') as handle:
+        pickle.dump(deviceDict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    

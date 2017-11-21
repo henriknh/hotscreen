@@ -7,5 +7,6 @@ Step 2:
 Run following commands (don't miss the dot),
  pip install -e .
  flask run
+ flask run --host=0.0.0.0 (external)
 
 Requirements installed are in the setup.py file
