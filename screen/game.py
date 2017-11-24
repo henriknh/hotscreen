@@ -4,7 +4,7 @@
 import view
 import time
 
-lobbyCountDown = 5
+lobbyCountDown = 2
 gameCountDown = 1
 
 
@@ -55,6 +55,8 @@ def play(gameName='runner'):
         view.socketio.sleep(gameModule.interval)
         #for sid in players:
         #    view.broadcast('gamestate', playerupdates, '/controller', sid)
+
+        gameState['timestamp'] = time.time()
         view.broadcast('gamestate', gameState, '/screen')
 
     view.broadcast('lobbystate', "gameover", '/screen')

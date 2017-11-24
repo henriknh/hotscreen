@@ -2,10 +2,15 @@ import psutil, json
 from flask import Flask, render_template, redirect
 from . import handlers
 from view import view
+from registration import *
+
+reg = Registration()
+port = 5000
+reg.register(port)
 
 @handlers.route("/")
 def index():
-    return render_template('index.html', qr="qr code", connect_code="1234")
+    return render_template('index.html', qr=reg.qr, connect_code=reg.code)
 
 @handlers.route("/status")
 def status():

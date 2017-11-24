@@ -2,13 +2,13 @@ import eventlet
 eventlet.sleep() # DONT REMOVE
 eventlet.monkey_patch()
 
-from game import *
-from lobby import *
+import game
+import lobby
 
 from flask import Flask, render_template, request
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import os, time, psutil, json, logging
+import os, time, psutil, json, logging, getpass
 from flask_socketio import SocketIO, emit
 
 #log = logging.getLogger('werkzeug')
@@ -28,10 +28,10 @@ class View(object):
     state = 'lobby'
 
     def __init__(self):
-        self.openBrowser('localhost:5050/lobby')
 
-        self.game = Game(self)
-        self.lobby = Lobby(self)
+
+        self.game = game.Game(self)
+        self.lobby = lobby.Lobby(self)
 
     def getState(self):
         return self.state
@@ -52,12 +52,14 @@ class View(object):
     def checkEnoughPlayers(self):
         if self.lobby.isEnough() and self.state == 'lobby':
             self.state = 'game'
-            socketio.start_background_task(play)
+            socketio.start_background_task(game.play)
 
     def broadcast(self, topic, message, namespace=None, room=None):
         broadcast(topic, message, namespace, room)
 
     def startFlask(self):
+        if getpass.getuser() == 'hotscreen':
+            self.openBrowser('localhost:5050/lobby')
         socketio.run(app, host='0.0.0.0', port=5050)
         #app.run(host='0.0.0.0', port=5050)
 

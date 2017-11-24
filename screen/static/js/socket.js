@@ -32,10 +32,15 @@ socket.on('lobbystate', function(lobbystate) {
         document.getElementById('loading').style.display='none';
         document.getElementById('gameover').style.display='block';
     }
+
+    gameState = {};
+    lastGameState = {};
 });
 
 window.onload = function(e){
     canvasResize();
+    mainLoop();
+    renderLoop();
 };
 
 window.onresize = function(e) {
@@ -59,39 +64,89 @@ function canvasResize() {
     canvasOffsetX = canvasWidth*0.25;
     canvasOffsetY = canvasHeight*0.6;
     objectScaling = (canvasWidth+canvasHeight)/2/15;
-    console.log('objectScaling', objectScaling);
 }
 
-let x = 0;
-socket.on('gamestate', function(gameState) {
-    gameState = JSON.parse(gameState);
-    console.log(gameState);
+var gameState = {};
+var lastGameState = {};
+var gameStateTick = 0;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // background
-    ctx.fillStyle=gameState.background.color;
-    ctx.fillRect(0,0,canvasWidth,canvasHeight);
-
-    // ground
-    gameState.ground.forEach(function(ground) {
-        ctx.fillStyle=ground.color;
-        ctx.fillRect(objectScaling*ground.x+canvasOffsetX,objectScaling*-ground.y+canvasOffsetY,objectScaling*ground.width,objectScaling*-ground.height);
-    });
-
-    // obstacles
-    gameState.obstacles.forEach(function(obstacle) {
-        ctx.fillStyle=obstacle.color;
-        ctx.fillRect(objectScaling*obstacle.x+canvasOffsetX,objectScaling*-obstacle.y+canvasOffsetY,objectScaling*obstacle.width,objectScaling*-obstacle.height);
-    });
-
-    // players
-    gameState.players.forEach(function(player) {
-        ctx.fillStyle=player.color;
-        ctx.fillRect(objectScaling*player.x+canvasOffsetX,objectScaling*-player.y+canvasOffsetY,objectScaling*player.width,objectScaling*-player.height);
-    });
+socket.on('gamestate', function(gameStateIn) {
+    gameStateTick = window.performance.now();
+    lastGameState = gameState;
+    gameState = JSON.parse(gameStateIn);
 });
 
+var fps = 60;
+var ticks = 0;
+var lastTick = 0;
+function mainLoop()
+{
+    // Do stuff...
+
+    //window.setTimeout(mainLoop, 1000 / fps);
+}
+function renderLoop() {
+    //ticks++;
+
+    let nowTick = window.performance.now();
+    let deltaTime = nowTick - lastTick;
+    lastTick = nowTick;
+
+    if(typeof gameState !== 'undefined' && typeof lastGameState !== 'undefined') {
+        if(Object.keys(gameState).length !== 0 && gameState.constructor === Object && Object.keys(lastGameState).length !== 0 && lastGameState.constructor === Object) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            let timeSinceLastGameStatus = (window.performance.now() - gameStateTick)/ 1000;
+            deltaTimeGameState = gameState.timestamp - lastGameState.timestamp;
+            let deltaXGameState = gameState.players[0].x - lastGameState.players[0].x;
+            let deltaXPerSecond = deltaXGameState / deltaTimeGameState;
+            let deltaX = deltaXPerSecond * timeSinceLastGameStatus;
+
+            ctx.fillStyle=gameState.players[0].color;
+            ctx.fillRect(objectScaling*(gameState.players[0].x+deltaX),objectScaling*-0+canvasOffsetY,objectScaling*gameState.players[0].width,objectScaling*-gameState.players[0].height);
+
+
+        }
+    }
+
+
+
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    /*// background
+    if(gameState.hasOwnProperty('background')) {
+        ctx.fillStyle=gameState.background.color;
+        //ctx.fillRect(0,0,canvasWidth,canvasHeight);
+    }
+
+    // ground
+    if(gameState.hasOwnProperty('ground')) {
+        gameState.ground.forEach(function(ground) {
+            ctx.fillStyle=ground.color;
+            //ctx.fillRect(objectScaling*ground.x+canvasOffsetX,objectScaling*-ground.y+canvasOffsetY,objectScaling*ground.width,objectScaling*-ground.height);
+        });
+    }
+
+    // obstacles
+    if(gameState.hasOwnProperty('obstacles')) {
+        gameState.obstacles.forEach(function(obstacle) {
+            ctx.fillStyle=obstacle.color;
+            ctx.fillRect(xPosition+canvasOffsetX,-obstacle.y+canvasOffsetY,objectScaling*obstacle.width,objectScaling*-obstacle.height);
+            //ctx.fillRect(obstacle.x,objectScaling*-obstacle.y+canvasOffsetY,objectScaling*obstacle.width,objectScaling*-obstacle.height);
+        });
+    }
+
+    // players
+    if(gameState.hasOwnProperty('players')) {
+        gameState.players.forEach(function(player) {
+            ctx.fillStyle=player.color;
+            ctx.fillRect(objectScaling*player.x+canvasOffsetX,objectScaling*-player.y+canvasOffsetY,objectScaling*player.width,objectScaling*-player.height);
+        });
+    }*/
+
+	//window.requestAnimationFrame(renderLoop);
+	window.setTimeout(renderLoop, 1000 / fps);
+}
 
 socket.on('queue_updated', function(queue) {
     let json = JSON.parse(queue);
@@ -106,7 +161,7 @@ socket.on('queue_updated', function(queue) {
 
 var startPing, stopPing;
 function ping() {
-    startPing = new Date().getTime();
+    startPing = window.performance.now();
     socket.emit('ping', {});
 }
 
@@ -115,8 +170,9 @@ setInterval(function(){
 }, 1000);
 
 socket.on('ping', function(data) {
-    stopPing = new Date().getTime();
-    console.log((stopPing-startPing)+ ' ms');
+    stopPing = window.performance.now();
+    console.log((stopPing-startPing).toFixed(2)+ ' ms\n#'+ticks+' render updates');
+    ticks = 0;
 });
 
 

@@ -47,7 +47,10 @@ html,body {
     text-align: center;
 }
 #lobby div .top {
-    margin-top: 40%;
+    margin-top: 35%;
+}
+#lobby div .top img {
+    height: 30vh;
 }
 #lobby .topright {
     height: 80vh;

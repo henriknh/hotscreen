@@ -1,8 +1,9 @@
 
 import time, random
 
-interval = 0.0333
-colors = ['#90EE90', '#87CEFA', '#FF4500', '#EE82EE']
+#interval = 1/30
+interval = 1/10
+colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
 
 def init(gameState, players):
 
@@ -13,12 +14,12 @@ def init(gameState, players):
     gameState['ground'] = []
     gameState['ground'].append({'x': -1000, 'y': -2000, 'color': '#778899', 'width': 2000, 'height': 2000})
 
-    lastObstacleX = 20
+    lastObstacleX = 1000
     gameState['obstacles'] = []
     for index in range(0, 10):
         heightY = random.randint(0, 1)
-        obstaclePosX = lastObstacleX+random.randint(8, 12)
-        gameState['obstacles'].append({'x': obstaclePosX, 'y': 0.2+heightY*0.8, 'color': '#778899', 'width': 0.5, 'height': 0.5})
+        obstaclePosX = lastObstacleX+random.randint(150, 350)
+        gameState['obstacles'].append({'x': obstaclePosX, 'y': 50+heightY*200, 'color': '#778899', 'width': 0.5, 'height': 0.5})
         lastObstacleX = obstaclePosX
 
     gameState['players'] = []
@@ -34,10 +35,10 @@ def update(gameState, playerInput, lastTick):
     gameState['iteration'] = gameState['iteration'] + 1
 
     for ground in gameState['ground']:
-        ground['x'] = ground['x'] - 5*deltaTime
+        ground['x'] = ground['x'] - 5#*deltaTime
 
     for obstacle in gameState['obstacles']:
-        obstacle['x'] = obstacle['x'] - 5*deltaTime
+        obstacle['x'] = obstacle['x'] - 5#*deltaTime
 
     for player in gameState['players']:
         '''
@@ -46,12 +47,16 @@ def update(gameState, playerInput, lastTick):
             print(ground)
             print(collisionDetect(player['x'], ground['x'], player['y'], ground['y'], player['width'], ground['width'], player['height'], ground['height']))
         '''
+        player['x'] = player['x'] + 5*deltaTime
         player['y'] = player['y'] + 9.82*deltaTime
+
+        if player['x'] > 20:
+            player['x'] = 0
 
     return gameState
 
 def ended(gameState):
-    if gameState['iteration'] == 400:
+    if gameState['iteration'] == 100:
         return True
     return False
 
