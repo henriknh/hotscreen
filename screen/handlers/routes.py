@@ -11,11 +11,3 @@ reg.register(port)
 @handlers.route("/")
 def index():
     return render_template('index.html', qr=reg.qr, connect_code=reg.code)
-
-@handlers.route("/status")
-def status():
-    data = {
-        'cpu': psutil.cpu_percent(interval=1),
-        'memory': psutil.virtual_memory().percent
-    }
-    return json.dumps(data)

@@ -1,7 +1,6 @@
 flask>=0.12.2
 selenium>=3.6.0
 flask-socketio>=2.9.2
-psutil>=5.4.1
 eventlet>=0.21.0
 requests>=2.18.4
 pillow>=3.4.2
