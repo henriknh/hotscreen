@@ -8,8 +8,11 @@ import pickle
 MAX_KEYS = 2
 
 def loadDictionary():
-    with open('deviceDictionary.pickle', 'rb') as handle:
-        return pickle.load(handle)
+    try:
+        with open('deviceDictionary.pickle', 'rb') as handle:
+            return pickle.load(handle)
+    except FileNotFoundError:
+        return MultiKeyDictionary()
 
 deviceDict = loadDictionary()
 
