@@ -49,7 +49,6 @@ def update(gameState, playerInput, lastTick):
 def ended(gameState):
     ended = True
     for player in gameState['players']:
-        print(player['dead'])
         if not player['dead']:
             ended = False
     return ended
