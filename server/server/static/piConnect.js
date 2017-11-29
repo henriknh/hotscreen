@@ -1,17 +1,21 @@
 
-var ip = 'ws://' + getIP();
+var ip = 'ws://' + getIP() + '/controller';
+console.log(ip);
 var socket = io.connect(ip);
 
 function getIP() {
     var ip = document.getElementById('ip');
     var port = document.getElementById('port');
-    return ip+port;
+    return ip + ':' + port;
 }
 
 
 socket.on('connect', function () {
-        socket.emit('setup');
+    socket.emit('setup');
 
+});
+socket.on('disconnect', function () {
+    console.log('Disconect');
 });
 socket.on('updated', function() {
         console.log('updated and finnished');
@@ -24,7 +28,7 @@ function sendData(event) {
     var gamma = event.gamma;
 
     var json1 = JSON.stringify({data: alpha + ':' + beta + ':' + gamma});
-    socket.emit('device',json1);
+    socket.emit('movement',json1);
 
 
 }
@@ -37,7 +41,7 @@ function moveDown() {
     console.log('moveddown');
     socket.emit('move' , 'down');
 }
-window.addEventListener('devicemotion', sendData , true);
+window.addEventListener('deviceorientation', sendData , true);
 
 
 function getData(){
