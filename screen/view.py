@@ -26,10 +26,9 @@ class View(object):
     lobby = None
     game = None
     state = 'lobby'
+    playing = False
 
     def __init__(self):
-
-
         self.game = game.Game(self)
         self.lobby = lobby.Lobby(self)
 
@@ -38,7 +37,11 @@ class View(object):
 
     def setState(self, state):
         self.state = state
+        self.broadcast('lobbystate', state, '/screen')
         return self.state
+
+    def setGameOver(self):
+        self.playing = False
 
     def getLobby(self):
         return self.lobby
@@ -50,8 +53,8 @@ class View(object):
         return socketio
 
     def checkEnoughPlayers(self):
-        if self.lobby.isEnough() and self.state == 'lobby':
-            self.state = 'game'
+        if self.lobby.isEnough() and self.playing == False:
+            self.playing = True
             socketio.start_background_task(game.play)
 
     def broadcast(self, topic, message, namespace=None, room=None):
@@ -61,7 +64,6 @@ class View(object):
         if getpass.getuser() == 'hotscreen':
             self.openBrowser('localhost:5050/lobby')
         socketio.run(app, host='0.0.0.0', port=5050)
-        #app.run(host='0.0.0.0', port=5050)
 
     def openBrowser(self, url):
         opts = Options()

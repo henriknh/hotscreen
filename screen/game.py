@@ -4,23 +4,23 @@
 import view
 import time
 
-lobbyCountDown = 2
-gameCountDown = 1
-
+lobbyCountDown = 3
+gameCountDown = 3
 
 def play(gameName='runner'):
 
     i = 0
-    while i <= lobbyCountDown+1:
+    while i < lobbyCountDown:
         view.broadcast('countdown', lobbyCountDown-i, '/screen')
         i+=1
         if lobbyCountDown-i >= 0:
             view.socketio.sleep(1)
+    view.broadcast('countdown', -1, '/screen')
 
     view.view.getLobby().fillGame()
     players = view.view.getLobby().getGameQueue()
 
-    view.broadcast('lobbystate', "loading", '/screen')
+    view.view.setState("loading")
 
     gameState = {}
 
@@ -31,16 +31,17 @@ def play(gameName='runner'):
 
     view.socketio.sleep(1)
 
-    view.broadcast('lobbystate', "game", '/screen')
+    view.view.setState("game")
 
     view.broadcast('gamestate', gameState, '/screen')
 
     i = 0
-    while i <= gameCountDown+1:
+    while i < gameCountDown:
         view.broadcast('countdown', gameCountDown-i, '/screen')
         i+=1
-        if lobbyCountDown-i > 0:
+        if lobbyCountDown-i >= 0:
             view.socketio.sleep(1)
+    view.broadcast('countdown', gameCountDown-i, '/screen')
 
     lastTick = int(round(time.time() * 1000000))
     i = 0
@@ -59,13 +60,12 @@ def play(gameName='runner'):
         gameState['timestamp'] = time.time()
         view.broadcast('gamestate', gameState, '/screen')
 
-    view.broadcast('lobbystate', "gameover", '/screen')
-    view.view.setState('lobby')
+    view.view.setState("gameover")
     view.view.getLobby().gameEnded()
 
     view.socketio.sleep(3)
-
-    view.broadcast('lobbystate', "lobby", '/screen')
+    view.view.setState("lobby")
+    view.view.setGameOver()
 
 
 class Game(object):
