@@ -8,7 +8,7 @@ import lobby
 from flask import Flask, render_template, request
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import os, time, psutil, json, logging, getpass
+import os, time, json, logging, getpass
 from flask_socketio import SocketIO, emit
 
 #log = logging.getLogger('werkzeug')
