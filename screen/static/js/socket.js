@@ -10,7 +10,10 @@ socket.on('disconnect', function() {
 });
 
 socket.on('lobbystate', function(lobbystate) {
+    console.log(typeof lobbystate);
     lobbystate = JSON.parse(lobbystate);
+
+    console.log(lobbystate);
     if(lobbystate == "lobby") {
         document.getElementById('lobby').style.display='block';
         document.getElementById('game').style.display='none';
@@ -177,12 +180,16 @@ socket.on('ping', function(data) {
 
 
 socket.on('countdown', function(countdown) {
+    console.log(countdown);
     if(countdown < 0) {
         document.getElementById("countdown").style.display = 'none';
         return;
     }
     if(countdown == 0) {
         countdown = "Go!";
+        setTimeout(function(){
+            document.getElementById("countdown").style.display = 'none';
+        }, 1000);
     }
 
     document.getElementById("countdown").style.display = 'block';

@@ -7,12 +7,12 @@ from flask_socketio import emit, join_room, leave_room
 
 @socketio.on('connect', namespace='/controller')
 def on_connect():
-    print('%s connected' % request.sid)
+    print('controller %s connected' % request.sid)
     view.getLobby().connectToLobby(request.sid)
 
 @socketio.on('disconnect', namespace='/controller')
 def on_disconnect():
-    print('%s disconnected' % request.sid)
+    print('controller %s disconnected' % request.sid)
     view.getLobby().disconnectFromLobby(request.sid)
 
 @socketio.on('ping', namespace='/controller')

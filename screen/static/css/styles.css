@@ -28,7 +28,7 @@ html,body {
 }
 
 #lobby {
-    display: block;
+    display: none;
     font-size: 2em;
 }
 #lobby .title {
