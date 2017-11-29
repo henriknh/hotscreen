@@ -12,6 +12,20 @@ html,body {
 }
 
 
+#countdown {
+    z-index: 1;
+    width: 100%;
+    font-size: 10em;
+    position: absolute;
+    text-align: center;
+    top: 65%;
+}
+#countdown:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
 
 #lobby {
     display: block;
@@ -33,7 +47,10 @@ html,body {
     text-align: center;
 }
 #lobby div .top {
-    margin-top: 40%;
+    margin-top: 35%;
+}
+#lobby div .top img {
+    height: 30vh;
 }
 #lobby .topright {
     height: 80vh;
@@ -52,19 +69,6 @@ html,body {
     width: 100%;
     float: left;
     text-align: center;
-}
-#lobby #countdown {
-    width: 100%;
-    font-size: 5em;
-    position: absolute;
-    text-align: center;
-    top: 65%;
-}
-#countdown:before {
-  content: "";
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
 }
 #lobby .code {
     display: inline-block;
@@ -126,4 +130,29 @@ html,body {
     height: 100%;
     width: 100%;
     position: absolute;
+}
+
+#loading {
+    display: none;
+}
+#loading .loading_text {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 10vh;
+    margin: 2vh;
+}
+#loading .loading_text .loading_symbol {
+    height: 10vh;
+    -webkit-animation:spin 3s linear infinite;
+    -moz-animation:spin 3s linear infinite;
+    animation:spin 3s linear infinite;
+    margin-left: 2vh;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+#gameover {
+    display: none;
 }

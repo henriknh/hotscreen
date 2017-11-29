@@ -1,12 +1,15 @@
 Step 1:
+Run following commands (don't miss the dot),
+ pip install -e .
+Will run the setup.py file
+
+Step 2:
 Set your flask app,
  export FLASK_APP=server // if linux
  set FLASK_APP=server // if windows
 
-Step 2:
-Run following commands (don't miss the dot),
- pip install -e .
+Step 3:
+Run the app:
  flask run
- flask run --host=0.0.0.0 (external)
 
 Requirements installed are in the setup.py file

@@ -11,6 +11,8 @@
 
 <body>
 
+    <div id="countdown"></div>
+
     <div id="lobby">
         <div class="title"><span style="color: tomato;">Hot</span> <span style="color: lightblue;">Screen</span></div>
 
@@ -30,7 +32,6 @@
         <div class="bottom">
             <div id="queue"></div>
         </div>
-        <div id="countdown"></div>
     </div>
 
     <div id="game">
@@ -44,6 +45,14 @@
         </div>
 
         <canvas id="gameBoard"></canvas>
+    </div>
+
+    <div id="loading">
+        <div class="loading_text">Loading<img class="loading_symbol" src="{{url_for('static', filename='media/loading.png')}}"></div>
+    </div>
+
+    <div id="gameover">
+        gameover
     </div>
 </body>
 
