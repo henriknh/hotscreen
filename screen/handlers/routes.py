@@ -1,4 +1,4 @@
-import psutil, json
+import json
 from flask import Flask, render_template, redirect
 from . import handlers
 from view import view

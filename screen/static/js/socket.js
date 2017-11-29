@@ -10,10 +10,7 @@ socket.on('disconnect', function() {
 });
 
 socket.on('lobbystate', function(lobbystate) {
-    console.log(typeof lobbystate);
     lobbystate = JSON.parse(lobbystate);
-
-    console.log(lobbystate);
     if(lobbystate == "lobby") {
         document.getElementById('lobby').style.display='block';
         document.getElementById('game').style.display='none';
@@ -42,7 +39,6 @@ socket.on('lobbystate', function(lobbystate) {
 
 window.onload = function(e){
     canvasResize();
-    mainLoop();
     renderLoop();
 };
 
@@ -66,7 +62,7 @@ function canvasResize() {
     ctx.canvas.height = canvasHeight;
     canvasOffsetX = canvasWidth*0.25;
     canvasOffsetY = canvasHeight*0.6;
-    objectScaling = (canvasWidth+canvasHeight)/2/15;
+    objectScaling = (canvasWidth+canvasHeight)/2/100;
 }
 
 var gameState = {};
@@ -79,17 +75,12 @@ socket.on('gamestate', function(gameStateIn) {
     gameState = JSON.parse(gameStateIn);
 });
 
-var fps = 60;
+var fps = 30;
 var ticks = 0;
 var lastTick = 0;
-function mainLoop()
-{
-    // Do stuff...
 
-    //window.setTimeout(mainLoop, 1000 / fps);
-}
 function renderLoop() {
-    //ticks++;
+    ticks++;
 
     let nowTick = window.performance.now();
     let deltaTime = nowTick - lastTick;
@@ -101,54 +92,88 @@ function renderLoop() {
 
             let timeSinceLastGameStatus = (window.performance.now() - gameStateTick)/ 1000;
             deltaTimeGameState = gameState.timestamp - lastGameState.timestamp;
-            let deltaXGameState = gameState.players[0].x - lastGameState.players[0].x;
-            let deltaXPerSecond = deltaXGameState / deltaTimeGameState;
-            let deltaX = deltaXPerSecond * timeSinceLastGameStatus;
 
-            ctx.fillStyle=gameState.players[0].color;
-            ctx.fillRect(objectScaling*(gameState.players[0].x+deltaX),objectScaling*-0+canvasOffsetY,objectScaling*gameState.players[0].width,objectScaling*-gameState.players[0].height);
+            // Background
+            if(gameState.hasOwnProperty('background')) {
+                ctx.fillStyle=gameState.background.color;
+                ctx.fillRect(0,0,canvasWidth,canvasHeight);
+            }
 
+            // Players
+            if(gameState.hasOwnProperty('players')) {
+                gameState.players.forEach(function (player, index) {
+                    if(lastGameState.players[index] && !player.dead) {
+                        let pos = calcObjectPostion(gameState.players[index], lastGameState.players[index], deltaTimeGameState, timeSinceLastGameStatus);
+                        drawSpaceship(pos, gameState.players[index]);
+                    }
+                });
+            }
 
+            // Obstacles
+            if(gameState.hasOwnProperty('asteroids')) {
+                gameState.asteroids.forEach(function (asteroid, index) {
+                    if(lastGameState.asteroids[index] && !asteroid.dead) {
+                        let pos = calcObjectPostion(gameState.asteroids[index], lastGameState.asteroids[index], deltaTimeGameState, timeSinceLastGameStatus);
+                        drawAsteroid(pos, gameState.asteroids[index]);
+                    }
+                });
+            }
+
+            // Stars
+            if(gameState.hasOwnProperty('stars')) {
+                gameState.stars.forEach(function (obstacle, index) {
+                    if(lastGameState.stars[index] && !obstacle.dead) {
+                        let pos = calcObjectPostion(gameState.stars[index], lastGameState.stars[index], deltaTimeGameState, timeSinceLastGameStatus);
+                        drawStars(pos, gameState.stars[index]);
+                    }
+                });
+            }
         }
     }
 
-
-
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    /*// background
-    if(gameState.hasOwnProperty('background')) {
-        ctx.fillStyle=gameState.background.color;
-        //ctx.fillRect(0,0,canvasWidth,canvasHeight);
-    }
-
-    // ground
-    if(gameState.hasOwnProperty('ground')) {
-        gameState.ground.forEach(function(ground) {
-            ctx.fillStyle=ground.color;
-            //ctx.fillRect(objectScaling*ground.x+canvasOffsetX,objectScaling*-ground.y+canvasOffsetY,objectScaling*ground.width,objectScaling*-ground.height);
-        });
-    }
-
-    // obstacles
-    if(gameState.hasOwnProperty('obstacles')) {
-        gameState.obstacles.forEach(function(obstacle) {
-            ctx.fillStyle=obstacle.color;
-            ctx.fillRect(xPosition+canvasOffsetX,-obstacle.y+canvasOffsetY,objectScaling*obstacle.width,objectScaling*-obstacle.height);
-            //ctx.fillRect(obstacle.x,objectScaling*-obstacle.y+canvasOffsetY,objectScaling*obstacle.width,objectScaling*-obstacle.height);
-        });
-    }
-
-    // players
-    if(gameState.hasOwnProperty('players')) {
-        gameState.players.forEach(function(player) {
-            ctx.fillStyle=player.color;
-            ctx.fillRect(objectScaling*player.x+canvasOffsetX,objectScaling*-player.y+canvasOffsetY,objectScaling*player.width,objectScaling*-player.height);
-        });
-    }*/
-
 	//window.requestAnimationFrame(renderLoop);
 	window.setTimeout(renderLoop, 1000 / fps);
+}
+
+function calcObjectPostion(state1, state2, deltaTimeGameState, timeSinceLastGameStatus) {
+    let deltaXGameState = state1.x - state2.x;
+    let deltaXPerSecond = deltaXGameState / deltaTimeGameState;
+    let deltaX = deltaXPerSecond * timeSinceLastGameStatus;
+
+    let deltaYGameState = state1.y - state2.y;
+    let deltaYPerSecond = deltaYGameState / deltaTimeGameState;
+    let deltaY = deltaYPerSecond * timeSinceLastGameStatus;
+
+    return {x: (state1.x+deltaX)*canvasWidth*0.01, y: (state1.y+deltaY)*canvasHeight*0.01};
+}
+
+function drawSpaceship(pos, state) {
+    ctx.fillStyle=state.color;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    ctx.lineTo(pos.x-canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height);
+    ctx.fill();
+}
+
+function drawAsteroid(pos, state) {
+    ctx.fillStyle=state.color;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    ctx.lineTo(pos.x-canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x, pos.y+canvasHeight*0.01*state.height);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);
+    ctx.fill();
+}
+
+function drawStars(pos, state) {
+    ctx.fillStyle=state.color;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y-canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x-canvasWidth*0.01*state.width/2, pos.y);
+    ctx.lineTo(pos.x, pos.y+canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y);
+    ctx.fill();
 }
 
 socket.on('queue_updated', function(queue) {
@@ -180,7 +205,6 @@ socket.on('ping', function(data) {
 
 
 socket.on('countdown', function(countdown) {
-    console.log(countdown);
     if(countdown < 0) {
         document.getElementById("countdown").style.display = 'none';
         return;
@@ -195,3 +219,8 @@ socket.on('countdown', function(countdown) {
     document.getElementById("countdown").style.display = 'block';
     document.getElementById("countdown").innerHTML = countdown;
 });
+
+function movement() {
+    console.log("movement");
+    socket_c.emit('movement', {dx: 0, dy: 10, rotation: 0});
+}

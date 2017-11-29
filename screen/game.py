@@ -4,10 +4,11 @@
 import view
 import time
 
-lobbyCountDown = 3
-gameCountDown = 3
+lobbyCountDown = 1
+minLoadingTime = 0
+gameCountDown = 1
 
-def play(gameName='runner'):
+def play(gameName='space'):
 
     i = 0
     while i < lobbyCountDown:
@@ -24,12 +25,17 @@ def play(gameName='runner'):
 
     gameState = {}
 
+    timeStartLoading = time.time()
+
     name = "games." + gameName
     gameModule = __import__(name, fromlist=[''])
 
+    loadingTime = time.time() - timeStartLoading
+
     gameState = gameModule.init(gameState, players)
 
-    view.socketio.sleep(1)
+    if loadingTime < minLoadingTime:
+        view.socketio.sleep(minLoadingTime-loadingTime)
 
     view.view.setState("game")
 
