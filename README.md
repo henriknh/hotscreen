@@ -14,13 +14,11 @@ Install the requirements located in hotscreen/server and hotscreen/screen
 ### Run the program
 ##### Run the server
 1. locate to hotscreen/server and run the following commands
-2. `export FLASK_APP=run.py`
-3. `flask run`
+2. `python3 run.py`
 
 ##### Run the screen
 1. locate to hotscreen/screen and run the following commands
-2. `export FLASK_APP=run.py`
-3. `flask run`
+2. `python3 run.py`
 
 ### Authors
 * Henrik
