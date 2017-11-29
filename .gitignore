@@ -104,3 +104,5 @@ venv.bak/
 .mypy_cache/
 
 .idea/
+server/deviceDictionary.pickle
+screen/static/media/qr.png
