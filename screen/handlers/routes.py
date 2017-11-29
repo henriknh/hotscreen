@@ -5,7 +5,7 @@ from view import view
 from registration import *
 
 reg = Registration()
-port = 5000
+port = 5050
 reg.register(port)
 
 @handlers.route("/")

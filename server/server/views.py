@@ -31,6 +31,8 @@ def startplaying(ID):
 @app.route('/register/<string:ip>/<int:port>', methods=['POST'])
 # POST since will add new information to the server, update list of devices
 def register(ip, port):
+    print(ip)
+    print(port)
     if request.method == 'POST': # will automatic show 405 error
         address = (ip, port) #should info add to list
         hashID = getHashID(address) # get an ID which depends on the address
@@ -91,4 +93,3 @@ def addDevice(deviceID, address): # first, need to check so not an update
 def saveDictionary():
     with open('deviceDictionary.pickle', 'wb') as handle:
         pickle.dump(deviceDict, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    
