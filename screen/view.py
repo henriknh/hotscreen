@@ -38,6 +38,8 @@ class View(object):
     def setState(self, state):
         self.state = state
         self.broadcast('lobbystate', state, '/screen')
+        for sid in self.lobby.getGameQueue():
+            self.broadcast('lobbystate', state, '/controller', sid)
         return self.state
 
     def setGameOver(self):

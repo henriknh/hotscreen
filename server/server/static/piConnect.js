@@ -15,35 +15,38 @@ function setIP(ip ,port) {
     socket.on('disconnect', function () {
         console.log('Disconect');
     });
-    socket.on('updated', function() {
-            console.log('updated and finnished');
-    });
     socket.on('lobbystate', function(lobbystate) {
-    lobbystate = JSON.parse(lobbystate);
-    if(lobbystate == "lobby") {
-        document.getElementById('lobby').style.display='block';
-        document.getElementById('game').style.display='none';
-        document.getElementById('loading').style.display='none';
-        document.getElementById('gameover').style.display='none';
-    } else if (lobbystate == "game") {
-        document.getElementById('lobby').style.display='none';
-        document.getElementById('game').style.display='block';
-        document.getElementById('loading').style.display='none';
-        document.getElementById('gameover').style.display='none';
-    } else if (lobbystate == "loading") {
-        document.getElementById('lobby').style.display='none';
-        document.getElementById('game').style.display='none';
-        document.getElementById('loading').style.display='block';
-        document.getElementById('gameover').style.display='none';
-    } else if (lobbystate == "gameover") {
-        document.getElementById('lobby').style.display='none';
-        document.getElementById('game').style.display='none';
-        document.getElementById('loading').style.display='none';
-        document.getElementById('gameover').style.display='block';
-    }
+        lobbystate = JSON.parse(lobbystate);
+        if(lobbystate == "lobby") {
+            document.getElementById('lobby').style.display='block';
+            document.getElementById('game').style.display='none';
+            document.getElementById('loading').style.display='none';
+            document.getElementById('gameover').style.display='none';
+        } else if (lobbystate == "game") {
+            document.getElementById('lobby').style.display='none';
+            document.getElementById('game').style.display='block';
+            document.getElementById('loading').style.display='none';
+            document.getElementById('gameover').style.display='none';
+        } else if (lobbystate == "loading") {
+            document.getElementById('lobby').style.display='none';
+            document.getElementById('game').style.display='none';
+            document.getElementById('loading').style.display='block';
+            document.getElementById('gameover').style.display='none';
+        } else if (lobbystate == "gameover") {
+            document.getElementById('lobby').style.display='none';
+            document.getElementById('game').style.display='none';
+            document.getElementById('loading').style.display='none';
+            document.getElementById('gameover').style.display='block';
+        }
+    });
 
-    gameState = {};
-    lastGameState = {};
+    socket.on('queueupdated', function(position) {
+        console.log('queueupdated');
+        console.log(position);
+    });
+    socket.on('playerstate', function(playerstate) {
+        console.log('playerstate');
+        console.log(playerstate);
     });
 
 }
@@ -52,8 +55,6 @@ var movement = {};
 function sendMovement() {
     if(!socket)
         return;
-
-    console.log(movement);
     socket.emit('movement', JSON.stringify(movement));
 }
 
@@ -62,7 +63,7 @@ setInterval(function(){
 }, 1000/10);
 
 function setOrientation(event) {
-    if(window.DeviceOrientationEvent){
+    if(window.DeviceOrientationEvent && 'ontouchstart' in window){
 
         movement.alpha = event.alpha;
         movement.beta = event.beta;
@@ -73,20 +74,20 @@ function setOrientation(event) {
         movement.beta = 0;
         movement.gamma = 0;
     }
-    
+
 
 }
 function setMotion(event) {
-    if(window.DeviceOrientationEvent){
+    if(window.DeviceOrientation && 'ontouchstart' in window){
 
         movement.x = event.acceleration.x;
         movement.y = event.acceleration.y;
-        movement.z = event.acceleration.z;        
+        movement.z = event.acceleration.z;
     }
-    else{   
+    else{
         movement.x = 0;
         movement.y = 0;
-        movement.z = 0;    
+        movement.z = 0;
     }
 
 }
@@ -103,10 +104,5 @@ window.addEventListener('deviceorientation', setOrientation , true);
 
 
 function getData(){
-    return document.getElementById()
-
+    return document.getElementById();
 }
-
-
-
-
