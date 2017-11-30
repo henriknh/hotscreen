@@ -79,7 +79,7 @@ def register(ip, port):
         return response
 
 def createQR(deviceID):
-    url = 'http://130.240.5.87/play/' + deviceID
+    url = 'http://130.240.5.87:5000/play/' + deviceID
     qr = qrcode.QRCode(
         version = 1,
         error_correction = qrcode.constants.ERROR_CORRECT_H,

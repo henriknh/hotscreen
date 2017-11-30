@@ -14,4 +14,4 @@ def index():
 
 @handlers.route("/heartbeat")
 def heartbeat():
-    return
+    return "ok"
