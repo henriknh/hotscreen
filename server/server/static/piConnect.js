@@ -35,7 +35,7 @@ function sendMovement() {
 
 setInterval(function(){
     sendMovement();
-}, 1000/3);
+}, 1000/10);
 
 function setOrientation(event) {
     movement.alpha = event.alpha;
@@ -50,13 +50,14 @@ function setMotion(event) {
 }
 function moveUp() {
     console.log('movedup');
-    movement.up = 1;
+    //movement.up = 1;
 }
 
 function moveDown() {
     console.log('moveddown');
-    movement.down = 1;
+    //movement.down = 1;
 }
+
 window.addEventListener('devicemotion', setMotion , true);
 window.addEventListener('deviceorientation', setOrientation , true);
 
