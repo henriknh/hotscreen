@@ -29,11 +29,6 @@ function sendMovement() {
     if(!socket)
         return;
 
-    /*var alpha = event.accelerator.zIndex;
-    var beta = event.beta;
-    var gamma = event.gamma;
-    let test = {x: 0, y: 0, z:0, rotation};
-    var json1 = JSON.stringify({data: alpha + ':' + beta + ':' + gamma});*/
     console.log(movement);
     socket.emit('movement', JSON.stringify(movement));
 }
@@ -49,20 +44,20 @@ function setOrientation(event) {
 
 }
 function setMotion(event) {
-    movement.x = 0;
-    movement.y = 0;
-    movement.z = 0;
+    movement.x = event.acceleration.x;
+    movement.y = event.acceleration.y;
+    movement.z = event.acceleration.z;
 }
 function moveUp() {
     console.log('movedup');
-    socket.emit('move' , 'up');
+    movement.up = 1;
 }
 
 function moveDown() {
     console.log('moveddown');
-    socket.emit('move' , 'down');
+    movement.down = 1;
 }
-//window.addEventListener('devicemotion', setOrientation , true);
+window.addEventListener('devicemotion', setMotion , true);
 window.addEventListener('deviceorientation', setOrientation , true);
 
 
