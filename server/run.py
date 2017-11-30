@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import subprocess
-subprocess.call(['python', 'setup.py', 'install'])
 
 from server import app
 
