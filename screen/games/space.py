@@ -34,7 +34,7 @@ def update(gameState, players_movement, lastTick):
             player['score'] = player['score'] + 1
             for player_movement in players_movement:
                 if player_movement['sid'] == player['sid']:
-                    player['x'] = player['x'] + player_movement['movement']['beta']*deltaTime
+                    player['x'] = player['x'] + float(player_movement['movement']['beta'])*deltaTime
                     if player['x'] <= 5:
                         player['x'] = 5
                     if player['x'] >= 95:
