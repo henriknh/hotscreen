@@ -35,7 +35,7 @@ scheduler = BackgroundScheduler()
 scheduler.start()
 scheduler.add_job(
     func=pingDevices,
-    trigger=IntervalTrigger(seconds=60), # may only be needed once a day perhaps
+    trigger=IntervalTrigger(seconds=15), # may only be needed once a day perhaps
     id='heartbeat_job',
     name='Check if devices in dictionary are still alive.',
     replace_existing=True)
