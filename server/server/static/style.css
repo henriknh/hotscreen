@@ -1,0 +1,14 @@
+
+.lobby{
+	background-color: red;
+}
+.game{
+	background-color: blue;
+
+}
+.gameover{
+	background-color: orange;
+}
+.loading{
+	background-color: green;
+}

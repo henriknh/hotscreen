@@ -51,7 +51,14 @@ function setIP(ip ,port) {
 
 }
 
-var movement = {};
+var movement = {
+    alpha: 0,
+    beta: 0,
+    gamma: 0,
+    x: 0,
+    y: 0,
+    z: 0
+};
 function sendMovement() {
     if(!socket)
         return;
@@ -64,32 +71,17 @@ setInterval(function(){
 
 function setOrientation(event) {
     if(window.DeviceOrientationEvent && 'ontouchstart' in window){
-
         movement.alpha = event.alpha;
         movement.beta = event.beta;
         movement.gamma = event.gamma;
     }
-    else{
-        movement.alpha = 0;
-        movement.beta = 0;
-        movement.gamma = 0;
-    }
-
-
 }
 function setMotion(event) {
     if(window.DeviceOrientation && 'ontouchstart' in window){
-
         movement.x = event.acceleration.x;
         movement.y = event.acceleration.y;
         movement.z = event.acceleration.z;
     }
-    else{
-        movement.x = 0;
-        movement.y = 0;
-        movement.z = 0;
-    }
-
 }
 function moveUp() {
     console.log('movedup');
