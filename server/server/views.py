@@ -92,11 +92,12 @@ def createQR(deviceID):
 
 def getCodeID():
     s = ""
-    s = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    size = 5
+    s = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(size))
     if deviceDict.has(s): # key already exist
         i = 0
         while i < 5: # try 5 time for new code
-            s = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+            s = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(size))
             if deviceDict.has(s): # again, code exists
                 i += 1
             else:
