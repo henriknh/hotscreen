@@ -3,7 +3,7 @@ from queues import *
 class Lobby(object):
 
     minPlayers = 1
-    maxPlayers = 2
+    maxPlayers = 4
 
     def __init__(self, view):
         self.view = view
