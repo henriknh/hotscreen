@@ -75,7 +75,7 @@ socket.on('gamestate', function(gameStateIn) {
     gameState = JSON.parse(gameStateIn);
 });
 
-var fps = 60;
+var fps = 30;
 var ticks = 0;
 var lastTick = 0;
 
