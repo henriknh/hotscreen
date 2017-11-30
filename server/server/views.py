@@ -53,7 +53,7 @@ def getDevices():
     return deviceDict.str()
 
 @app.route('/play/<string:ID>', methods=['GET'])
-def startplaying(ID):
+def startplaying(ID.upper()):
     try:
         address = deviceDict[ID] # return parameter, might no be in dictionary
     except KeyError:
