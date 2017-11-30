@@ -35,7 +35,7 @@ scheduler = BackgroundScheduler()
 scheduler.start()
 scheduler.add_job(
     func=pingDevices,
-    trigger=IntervalTrigger(seconds=60), # may only be needed once a day perhaps
+    trigger=IntervalTrigger(seconds=15), # may only be needed once a day perhaps
     id='heartbeat_job',
     name='Check if devices in dictionary are still alive.',
     replace_existing=True)
@@ -79,7 +79,7 @@ def register(ip, port):
         return response
 
 def createQR(deviceID):
-    url = 'http://130.240.5.87/play/' + deviceID
+    url = 'http://130.240.5.87:5000/play/' + deviceID
     qr = qrcode.QRCode(
         version = 1,
         error_correction = qrcode.constants.ERROR_CORRECT_H,

@@ -1,5 +1,5 @@
 var socket = io.connect('ws://localhost:5050/screen');
-var socket_c = io.connect('ws://localhost:5050/controller');
+//var socket_c = io.connect('ws://localhost:5050/controller');
 
 socket.on('connect', function() {
     console.log('connect');
@@ -75,7 +75,7 @@ socket.on('gamestate', function(gameStateIn) {
     gameState = JSON.parse(gameStateIn);
 });
 
-var fps = 60;
+var fps = 30;
 var ticks = 0;
 var lastTick = 0;
 
@@ -220,7 +220,7 @@ socket.on('countdown', function(countdown) {
     document.getElementById("countdown").innerHTML = countdown;
 });
 
-function movement() {
+/*function movement() {
     socket_c.emit('movement', {x: 0, y: 0, z: 0, alpha: 0, beta: Math.sin(window.performance.now()*0.001)*50*-1, gamma: 0});
 }
 setInterval(function(){
@@ -229,4 +229,4 @@ setInterval(function(){
 
 socket_c.on('playerstate', function(playerState) {
     console.log(playerState);
-});
+});*/
