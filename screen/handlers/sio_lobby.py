@@ -15,6 +15,11 @@ def on_disconnect():
     print('controller %s disconnected' % request.sid)
     view.getLobby().disconnectFromLobby(request.sid)
 
+@socketio.on('requeue', namespace='/controller')
+def on_connect():
+    print('controller %s requeued' % request.sid)
+    view.getLobby().connectToLobby(request.sid)
+
 @socketio.on('ping', namespace='/controller')
 def on_ping(message):
     emit('ping', message, namespace='/controller')

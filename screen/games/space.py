@@ -66,7 +66,7 @@ def ended(gameState):
 def getPlayerState(gameState, sid):
     for player in gameState['players']:
         if player['sid'] == sid:
-            return {'score': player['score']}
+            return {'score': player['score'], 'backgroundcolor': player['color']}
     return {}
 
 def newAsteroid():
