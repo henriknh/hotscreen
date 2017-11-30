@@ -1,11 +1,23 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h2>Play!</h2>
-	<p>ip: {{ip}}</p>
-	<p>port: {{port}}</p>
     <script>
         setIP('{{ ip }}', '{{ port }}');
     </script>
-    <button id="button-up" onClick = "moveUp()" >Up</button>
-    <button id="button-down" onClick = "moveDown()">Down</button>
+	<div id="lobby">
+		background-color: orange;
+		<p>lobby</p>
+	</div>
+	<div id="game">
+		background-color: blue;
+		<p>game</p>
+	</div>
+	<div id="loading">
+		background-color: green;
+		<p>loading</p>
+	</div>
+	<div id="gameover">
+		background-color: purple;
+		<p>gameover</p>
+	</div>
+
 {% endblock %}
