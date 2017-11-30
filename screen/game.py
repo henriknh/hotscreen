@@ -8,6 +8,10 @@ lobbyCountDown = 1
 minLoadingTime = 0
 gameCountDown = 1
 
+ticks = 0
+
+players_movement = []
+
 def play(gameName='space'):
 
     i = 0
@@ -24,6 +28,7 @@ def play(gameName='space'):
     view.view.setState("loading")
 
     gameState = {}
+    ticks = 0
 
     timeStartLoading = time.time()
 
@@ -53,18 +58,20 @@ def play(gameName='space'):
     i = 0
     while True:
 
-        gameState = gameModule.update(gameState, {}, lastTick)
+        gameState = gameModule.update(gameState, players_movement, lastTick)
         lastTick = int(round(time.time() * 1000000))
 
         if gameModule.ended(gameState):
             break;
 
         view.socketio.sleep(gameModule.interval)
-        #for sid in players:
-        #    view.broadcast('gamestate', playerupdates, '/controller', sid)
+        for sid in players:
+            view.broadcast('playerstate', gameModule.getPlayerState(gameState, sid), '/controller', sid)
 
         gameState['timestamp'] = time.time()
         view.broadcast('gamestate', gameState, '/screen')
+
+        ticks = ticks + 1
 
     view.view.setState("gameover")
     view.view.getLobby().gameEnded()
@@ -72,6 +79,15 @@ def play(gameName='space'):
     view.socketio.sleep(3)
     view.view.setState("lobby")
     view.view.setGameOver()
+
+def set_movement(sid, movement):
+    updated = False
+    for player_movement in players_movement:
+        if player_movement['sid'] == sid:
+            player_movement['movement'] = movement
+            updated = True
+    if not updated:
+        players_movement.append({'sid': sid, 'movement': movement})
 
 
 class Game(object):

@@ -2,8 +2,9 @@
 import time, random
 
 #interval = 1/30
-interval = 1/10
+interval = 1/30
 colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
+
 
 def init(gameState, players):
 
@@ -15,20 +16,29 @@ def init(gameState, players):
     for index in range(0, 15):
         gameState['asteroids'].append(newAsteroid())
 
+    player_placement_interval = 100/(len(players)+1)
     gameState['players'] = []
     for index, player in enumerate(players):
-        gameState['players'].append({'sid': player, 'x': 50, 'y': 80, 'dead': False, 'color': colors[index], 'width': 6, 'height': 10})
+        gameState['players'].append({'sid': player, 'x': (index+1)*player_placement_interval, 'y': 80, 'dead': False, 'color': colors[index], 'width': 6, 'height': 10, 'score': 0})
 
     return gameState
 
-def update(gameState, playerInput, lastTick):
+def update(gameState, players_movement, lastTick):
 
     deltaTime = (int(round(time.time() * 1000000)) - lastTick)/1000000
 
     gameState['iteration'] = gameState['iteration'] + 1
 
     for player in gameState['players']:
-        player['x'] = player['x'] + 1*deltaTime
+        if player['dead'] == False:
+            player['score'] = player['score'] + 1
+            for player_movement in players_movement:
+                if player_movement['sid'] == player['sid']:
+                    player['x'] = player['x'] + player_movement['movement']['beta']*deltaTime
+                    if player['x'] <= 5:
+                        player['x'] = 5
+                    if player['x'] >= 95:
+                        player['x'] = 95
 
     for asteroid in gameState['asteroids']:
         if asteroid['dead']:
@@ -52,6 +62,12 @@ def ended(gameState):
         if not player['dead']:
             ended = False
     return ended
+
+def getPlayerState(gameState, sid):
+    for player in gameState['players']:
+        if player['sid'] == sid:
+            return {'score': player['score']}
+    return {}
 
 def newAsteroid():
     w = random.randint(4, 8)

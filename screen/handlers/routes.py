@@ -13,5 +13,5 @@ def index():
     return render_template('index.html', qr=reg.qr, connect_code=reg.code)
 
 @handlers.route("/heartbeat")
-def heartbeat:
+def heartbeat():
     return
