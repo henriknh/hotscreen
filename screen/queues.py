@@ -3,7 +3,6 @@ class Queue(object):
 
         self.queue = []
 
-
     def append(self, elem):
         self.queue.append(elem)
 
@@ -38,3 +37,11 @@ class Queue(object):
 
     def getQueue(self):
         return self.queue
+
+    def getIndex(self, name):
+        i = 0
+        for q in self.queue:
+            if q == name:
+                return i
+            i = i+1
+        return -1

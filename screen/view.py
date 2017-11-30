@@ -23,6 +23,8 @@ def broadcast(topic, message, namespace=None, room=None):
 
 class View(object):
 
+    games = ['space']
+
     lobby = None
     game = None
     state = 'lobby'
@@ -45,6 +47,9 @@ class View(object):
     def setGameOver(self):
         self.playing = False
 
+        self.lobby.gameEnded()
+
+
     def getLobby(self):
         return self.lobby
 
@@ -57,7 +62,9 @@ class View(object):
     def checkEnoughPlayers(self):
         if self.lobby.isEnough() and self.playing == False:
             self.playing = True
-            socketio.start_background_task(game.play)
+            gameModule = self.games.pop()
+            self.games.append(gameModule)
+            socketio.start_background_task(game.play, gameModule)
 
     def broadcast(self, topic, message, namespace=None, room=None):
         broadcast(topic, message, namespace, room)

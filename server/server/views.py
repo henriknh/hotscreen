@@ -52,6 +52,10 @@ def getDevices():
         return "No devices are registered..."
     return deviceDict.str()
 
+@app.route('/play/dummy', methods=['GET'])
+def dummyroute():
+    return render_template('play.html', ip='localhost', port=5050)
+
 @app.route('/play/<string:ID>', methods=['GET'])
 def startplaying(ID):
     ID = ID.upper()
@@ -65,11 +69,9 @@ def startplaying(ID):
 @app.route('/register/<string:ip>/<int:port>', methods=['POST'])
 # POST since will add new information to the server, update list of devices
 def register(ip, port):
-    print(ip)
-    print(port)
     if request.method == 'POST': # will automatic show 405 error
         address = (ip, port) #should info add to list
-        hashID = getHashID(address) # get an ID which depends on the address
+        hashID = getHashID(address).upper() # get an ID which depends on the address
         codeID = getCodeID()
         newDevice(hashID, address) # add the hash id
         newDevice(codeID, address) #add digit code

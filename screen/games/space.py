@@ -1,8 +1,7 @@
 
 import time, random
 
-#interval = 1/30
-interval = 1/30
+interval = 1/10
 colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
 
 
@@ -66,7 +65,7 @@ def ended(gameState):
 def getPlayerState(gameState, sid):
     for player in gameState['players']:
         if player['sid'] == sid:
-            return {'score': player['score'], 'backgroundcolor': player['color']}
+            return {'backgroundcolor': player['color'], 'space': {'score': player['score']}}
     return {}
 
 def newAsteroid():

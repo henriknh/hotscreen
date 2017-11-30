@@ -12,7 +12,7 @@ ticks = 0
 
 players_movement = []
 
-def play(gameName='space'):
+def play(gameName):
 
     i = 0
     while i < lobbyCountDown:
@@ -74,9 +74,8 @@ def play(gameName='space'):
         ticks = ticks + 1
 
     view.view.setState("gameover")
-    view.view.getLobby().gameEnded()
-
     view.socketio.sleep(3)
+
     view.view.setState("lobby")
     view.view.setGameOver()
 

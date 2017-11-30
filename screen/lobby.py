@@ -24,11 +24,20 @@ class Lobby(object):
         self.lobby.append(name)
         self.view.checkEnoughPlayers()
         self.view.broadcast('queue_updated', self.getLobbyQueue(), '/screen')
+        self.view.broadcast('lobbystate', 'lobby', '/controller', name)
+        i = 0
+        for sid in self.getLobbyQueue():
+            self.view.broadcast('queueupdated', i, '/controller', sid)
+            i =i+1
         return True
 
     def disconnectFromLobby(self, name):
         return self.lobby.remove(name)
         self.view.broadcast('queue_updated', self.getLobbyQueue(), '/screen')
+        i = 0
+        for sid in self.getLobbyQueue():
+            self.view.broadcast('queueupdated', i, '/controller', sid)
+            i =i+1
 
     def getLobbySize(self):
         return self.lobby.size()
@@ -63,6 +72,10 @@ class Lobby(object):
     def gameEnded(self):
         for i in range(0, self.game.size()):
             self.game.pop()
+        i = 0
+        for sid in self.getLobbyQueue():
+            self.view.broadcast('queueupdated', i, '/controller', sid)
+            i =i+1
         self.view.checkEnoughPlayers()
         self.view.broadcast('queue_updated', self.getLobbyQueue(), '/screen')
         return True

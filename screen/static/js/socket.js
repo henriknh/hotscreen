@@ -150,19 +150,27 @@ function calcObjectPostion(state1, state2, deltaTimeGameState, timeSinceLastGame
 function drawSpaceship(pos, state) {
     ctx.fillStyle=state.color;
     ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
+    ctx.moveTo(pos.x-canvasWidth*0.01*state.width/2, pos.y-canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x-canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y-canvasHeight*0.01*state.height/2);
+    /*ctx.moveTo(pos.x, pos.y);
     ctx.lineTo(pos.x-canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height);
-    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height);*/
     ctx.fill();
 }
 
 function drawAsteroid(pos, state) {
     ctx.fillStyle=state.color;
     ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
+    ctx.moveTo(pos.x-canvasWidth*0.01*state.width/2, pos.y-canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x-canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y-canvasHeight*0.01*state.height/2);
+    /*ctx.moveTo(pos.x, pos.y);
     ctx.lineTo(pos.x-canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);
     ctx.lineTo(pos.x, pos.y+canvasHeight*0.01*state.height);
-    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);
+    ctx.lineTo(pos.x+canvasWidth*0.01*state.width/2, pos.y+canvasHeight*0.01*state.height/2);*/
     ctx.fill();
 }
 
