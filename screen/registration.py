@@ -20,11 +20,11 @@ class Registration(object):
         except IndexError:
             ipaddr = socket.gethostbyname(socket.gethostname())
 
-        url = 'http://http://130.240.5.87:5000/register/%s/%d' % (ipaddr, port)
+        url = 'http://130.240.5.87:5000/register/%s/%d' % (ipaddr, port)
         r = requests.post(url)
         status_code = r.status_code
         if status_code != 200:
-            print('Something went wrong, got ' + status_code, file=sys.stderr)
+            print('Something went wrong, got ' + str(status_code))
             return -1
         else:
             response = pickle.loads(r.content) # unbox the response content
