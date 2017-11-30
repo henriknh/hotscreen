@@ -16,6 +16,8 @@ function setIP(ip ,port) {
         console.log('Disconect');
     });
     socket.on('lobbystate', function(lobbystate) {
+        console.log('lobbystate');
+        console.log(lobbystate);
         lobbystate = JSON.parse(lobbystate);
         if(lobbystate == "lobby") {
             document.getElementById('lobby').style.display='block';
@@ -43,10 +45,14 @@ function setIP(ip ,port) {
     socket.on('queueupdated', function(position) {
         console.log('queueupdated');
         console.log(position);
+        setLobby(position);
     });
     socket.on('playerstate', function(playerstate) {
         console.log('playerstate');
-        console.log(playerstate);
+        playerstate = JSON.parse(playerstate);
+        console.log(playerstate.backgroundcolor);
+        console.log(playerstate.space.score);
+        setGame(playerstate.space.score , playerstate.backgroundcolor);
     });
 
 }
@@ -97,4 +103,15 @@ window.addEventListener('deviceorientation', setOrientation , true);
 
 function getData(){
     return document.getElementById();
+}
+
+function setLobby(position){
+    console.log("setlobby");
+    document.getElementById("queue").innerHTML = "Your place in queue is: " + (parseInt(position) + 1);
+}
+function setGame(score, background){
+    console.log("set score");
+    document.getElementById("body").style.background = background;
+    console.log(document.getElementById("body").style.background);
+    document.getElementById("score").innerHTML = "Your score is: " + score;
 }

@@ -1,19 +1,23 @@
 {% extends "layout.html" %}
 {% block body %}
-    <script>
-        setIP('{{ ip }}', '{{ port }}');
-    </script>
-	<div id="lobby">
-		<p>lobby</p>
-	</div>
-	<div id="game">
-		<p>game</p>
-	</div>
-	<div id="loading">
-		<p>loading</p>
-	</div>
-	<div id="gameover">
-		<p>gameover</p>
-	</div>
-
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<script>
+	        setIP('{{ ip }}', '{{ port }}');
+	</script>
+	<body id="body">  
+		<div id="lobby" class="center" >
+			<p id="queue" class="color"></p>
+		</div>
+		<div id="game" class="center" >
+			<p id="score" class="color"></p>
+		</div>
+		<div id="loading" class="center"  >
+			<p class="color">loading</p>
+		</div>
+		<div id="gameover" class="center" >
+			<p class="color">gameover</p>
+		</div>
+	</body>
 {% endblock %}

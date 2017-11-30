@@ -1,14 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One');
 
-.lobby{
-	background-color: red;
-}
-.game{
-	background-color: blue;
+body {
 
+    width: 100vw;
+    height: 100vw;
+    margin: 0;
+    padding: 0;
+    background-color: #a6f1a6;
+    font-family: 'Fredoka One', cursive;
+
+    /*cursor: none;*/
 }
-.gameover{
-	background-color: orange;
+#lobby {
+	
 }
-.loading{
-	background-color: green;
+#game {
+	display: none;
+}
+#gameover {
+	display: none;
+}
+#loading {
+	display: none;
+}
+.color{
+	position: 
+	color: blue;
+}
+.center{
+	position:fixed;
+    top: 50%;
+    left: 50%;
+
 }

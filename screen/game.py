@@ -4,8 +4,8 @@
 import view
 import time
 
-lobbyCountDown = 1
-minLoadingTime = 0
+lobbyCountDown = 3
+minLoadingTime = 3
 gameCountDown = 1
 
 ticks = 0
