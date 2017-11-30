@@ -75,7 +75,7 @@ socket.on('gamestate', function(gameStateIn) {
     gameState = JSON.parse(gameStateIn);
 });
 
-var fps = 30;
+var fps = 60;
 var ticks = 0;
 var lastTick = 0;
 
@@ -221,6 +221,12 @@ socket.on('countdown', function(countdown) {
 });
 
 function movement() {
-    console.log("movement");
-    socket_c.emit('movement', {dx: 0, dy: 10, rotation: 0});
+    socket_c.emit('movement', {x: 0, y: 0, z: 0, alpha: 0, beta: Math.sin(window.performance.now()*0.001)*50*-1, gamma: 0});
 }
+setInterval(function(){
+    movement();
+}, 1000/10);
+
+socket_c.on('playerstate', function(playerState) {
+    console.log(playerState);
+});
