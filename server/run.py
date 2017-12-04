@@ -1,10 +1,12 @@
 #!/usr/bin/python3.5
 
 from server import app
+from OpenSSL import SSL
 
 def start():
 	try:
-		app.run(host='0.0.0.0')
+		context = ('hotscreen.crt', 'hotscreen.key')
+		app.run(host='0.0.0.0', port=5000, debug = False, ssl_context=context)
 	except Exception:
 		print('Could not start server')
 		raise
