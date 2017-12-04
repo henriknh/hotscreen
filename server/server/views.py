@@ -1,5 +1,5 @@
 from server import app
-from flask import request, render_template, url_for
+from flask import request, render_template, url_for, redirect
 
 import pickle
 import hashlib
@@ -51,6 +51,11 @@ def getDevices():
     if deviceDict.str() == "":
         return "No devices are registered..."
     return deviceDict.str()
+
+@app.route('/play', methods=['POST']) # at index page, code input
+def play():
+    code = request.form['code']
+    return redirect(url_for('startplaying', ID=code))
 
 @app.route('/play/dummy', methods=['GET'])
 def dummyroute():
