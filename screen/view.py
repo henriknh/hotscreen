@@ -23,7 +23,7 @@ def broadcast(topic, message, namespace=None, room=None):
 
 class View(object):
 
-    games = ['space']
+    games = ['quiz']
 
     lobby = None
     game = None

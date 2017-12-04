@@ -8,6 +8,7 @@ colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
 def init(gameState, players):
 
     gameState['iteration'] = 0
+    gameState['game'] = 'space'
 
     gameState['background'] = {'color': '#101010'}
 

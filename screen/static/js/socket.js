@@ -22,6 +22,15 @@ socket.on('lobbystate', function(lobbystate) {
         document.getElementById('loading').style.display='none';
         document.getElementById('gameover').style.display='none';
     } else if (lobbystate == "loading") {
+
+        // Clear eventual prevous games
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        board.innerHtml = "";
+        while (board.firstChild) {
+            board.removeChild(board.firstChild);
+        }
+
+
         document.getElementById('lobby').style.display='none';
         document.getElementById('game').style.display='none';
         document.getElementById('loading').style.display='block';
@@ -47,6 +56,7 @@ window.onresize = function(e) {
 };
 
 var canvas;
+var board;
 var ctx;
 var canvasWidth;
 var canvasHeight;
@@ -55,6 +65,7 @@ var canvasOffsetY;
 var objectScaling;
 function canvasResize() {
     canvas = document.getElementById("gameBoard");
+    board = document.getElementById('htmlGameBoard');
     ctx = canvas.getContext("2d");
     canvasWidth = window.innerWidth;
     canvasHeight = window.innerHeight;
@@ -73,6 +84,7 @@ socket.on('gamestate', function(gameStateIn) {
     gameStateTick = window.performance.now();
     lastGameState = gameState;
     gameState = JSON.parse(gameStateIn);
+    console.log(gameState);
 });
 
 var fps = 30;
@@ -86,49 +98,114 @@ function renderLoop() {
     let deltaTime = nowTick - lastTick;
     lastTick = nowTick;
 
-    if(typeof gameState !== 'undefined' && typeof lastGameState !== 'undefined') {
-        if(Object.keys(gameState).length !== 0 && gameState.constructor === Object && Object.keys(lastGameState).length !== 0 && lastGameState.constructor === Object) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if(gameState.game == 'space') {
 
-            let timeSinceLastGameStatus = (window.performance.now() - gameStateTick)/ 1000;
-            deltaTimeGameState = gameState.timestamp - lastGameState.timestamp;
+        canvas.style.display = 'block';
+        board.style.display = 'none';
 
-            // Background
-            if(gameState.hasOwnProperty('background')) {
-                ctx.fillStyle=gameState.background.color;
-                ctx.fillRect(0,0,canvasWidth,canvasHeight);
-            }
+        if(typeof gameState !== 'undefined' && typeof lastGameState !== 'undefined') {
+            if(Object.keys(gameState).length !== 0 && gameState.constructor === Object && Object.keys(lastGameState).length !== 0 && lastGameState.constructor === Object) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Players
-            if(gameState.hasOwnProperty('players')) {
-                gameState.players.forEach(function (player, index) {
-                    if(lastGameState.players[index] && !player.dead) {
-                        let pos = calcObjectPostion(gameState.players[index], lastGameState.players[index], deltaTimeGameState, timeSinceLastGameStatus);
-                        drawSpaceship(pos, gameState.players[index]);
-                    }
-                });
-            }
+                let timeSinceLastGameStatus = (window.performance.now() - gameStateTick)/ 1000;
+                deltaTimeGameState = gameState.timestamp - lastGameState.timestamp;
 
-            // Obstacles
-            if(gameState.hasOwnProperty('asteroids')) {
-                gameState.asteroids.forEach(function (asteroid, index) {
-                    if(lastGameState.asteroids[index] && !asteroid.dead) {
-                        let pos = calcObjectPostion(gameState.asteroids[index], lastGameState.asteroids[index], deltaTimeGameState, timeSinceLastGameStatus);
-                        drawAsteroid(pos, gameState.asteroids[index]);
-                    }
-                });
-            }
+                // Background
+                if(gameState.hasOwnProperty('background')) {
+                    ctx.fillStyle=gameState.background.color;
+                    ctx.fillRect(0,0,canvasWidth,canvasHeight);
+                }
 
-            // Stars
-            if(gameState.hasOwnProperty('stars')) {
-                gameState.stars.forEach(function (obstacle, index) {
-                    if(lastGameState.stars[index] && !obstacle.dead) {
-                        let pos = calcObjectPostion(gameState.stars[index], lastGameState.stars[index], deltaTimeGameState, timeSinceLastGameStatus);
-                        drawStars(pos, gameState.stars[index]);
-                    }
-                });
+                // Players
+                if(gameState.hasOwnProperty('players')) {
+                    gameState.players.forEach(function (player, index) {
+                        if(lastGameState.players[index] && !player.dead) {
+                            let pos = calcObjectPostion(gameState.players[index], lastGameState.players[index], deltaTimeGameState, timeSinceLastGameStatus);
+                            drawSpaceship(pos, gameState.players[index]);
+                        }
+                    });
+                }
+
+                // Obstacles
+                if(gameState.hasOwnProperty('asteroids')) {
+                    gameState.asteroids.forEach(function (asteroid, index) {
+                        if(lastGameState.asteroids[index] && !asteroid.dead) {
+                            let pos = calcObjectPostion(gameState.asteroids[index], lastGameState.asteroids[index], deltaTimeGameState, timeSinceLastGameStatus);
+                            drawAsteroid(pos, gameState.asteroids[index]);
+                        }
+                    });
+                }
+
+                // Stars
+                if(gameState.hasOwnProperty('stars')) {
+                    gameState.stars.forEach(function (obstacle, index) {
+                        if(lastGameState.stars[index] && !obstacle.dead) {
+                            let pos = calcObjectPostion(gameState.stars[index], lastGameState.stars[index], deltaTimeGameState, timeSinceLastGameStatus);
+                            drawStars(pos, gameState.stars[index]);
+                        }
+                    });
+                }
             }
         }
+    }
+
+    if(gameState.game == 'quiz' && gameState.questions_done >= 0) {
+
+        canvas.style.display = 'none';
+        board.style.display = 'block';
+
+        board.innerHtml = "";
+        while (board.firstChild) {
+            board.removeChild(board.firstChild);
+        }
+
+        var question_progress = document.createElement('div');
+        question_progress.className = 'question_progress';
+        question_progress.innerHTML = (gameState.questions_done+1)+' / '+gameState.total_questions;
+        board.appendChild(question_progress);
+
+        var question = document.createElement('div');
+        question.className = 'question';
+        question.innerHTML = gameState.question.question;
+        board.appendChild(question);
+
+        if(gameState.state == 'answer') {
+            var answer = document.createElement('div');
+            answer.className = 'answer';
+            answer.innerHTML = gameState.question.alternatives[gameState.question.correct];
+            board.appendChild(answer);
+
+            /*if(gameState.question.hasOwnProperty('funfact')) {
+                var funfact = document.createElement('div');
+                funfact.className = 'funfact';
+                funfact.innerHTML = gameState.question.funfact;
+                board.appendChild(funfact);
+            }*/
+        } else {
+            var quiz_countdown = document.createElement('div');
+            quiz_countdown.className = 'answer';
+            quiz_countdown.innerHTML = gameState.countdown;
+            board.appendChild(quiz_countdown);
+        }
+
+        var score = document.createElement('div');
+        score.className = 'score';
+
+        gameState.players.forEach(function(player) {
+            var playerScore = document.createElement('div');
+            playerScore.className = 'player';
+            playerScore.innerHTML = player.score;
+            if(player.score > 99) {
+                playerScore.style.fontSize = "4em";
+            }
+            if(player.score > 999) {
+                playerScore.style.fontSize = "3em";
+            }
+            playerScore.style.backgroundColor = player.color;
+            score.appendChild(playerScore);
+        });
+
+        board.appendChild(score);
     }
 
 	//window.requestAnimationFrame(renderLoop);
