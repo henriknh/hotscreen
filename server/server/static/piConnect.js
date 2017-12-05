@@ -1,13 +1,21 @@
 
-var ip = "";
+var ip;
+var port;
 var socket;
 console.log(ip);
 
-function setIP(ip ,port) {
-    ip = 'ws://' + ip + ':' + port + '/controller';
-    console.log(ip);
+function setIP(ipIn ,portIn) {
+    ip = ipIn;
+    port = portIn;
+    socketUIConnect();
+}
 
-    socket = io.connect(ip);
+function socketUIConnect() {
+    console.log('socketUIConnect');
+    console.log(ip);
+    console.log(port);
+
+    socket = io.connect('ws://' + ip + ':' + port + '/controller', {'forceNew': true});
 
     socket.on('connect', function () {
         socket.emit('setup');
@@ -39,6 +47,7 @@ function setIP(ip ,port) {
             document.getElementById('game').style.display='none';
             document.getElementById('loading').style.display='none';
             document.getElementById('gameover').style.display='block';
+            socket.disconnect();
         }
     });
 
@@ -71,8 +80,8 @@ function setIP(ip ,port) {
         }    
         
     });
-
 }
+
 
 var movement = {
     alpha: 0,
@@ -90,7 +99,7 @@ function sendMovement() {
 
 setInterval(function(){
     sendMovement();
-}, 1000/10);
+}, 1000/30);
 
 function setOrientation(event) {
     if(window.DeviceOrientationEvent && 'ontouchstart' in window){
@@ -100,7 +109,7 @@ function setOrientation(event) {
     }
 }
 function setMotion(event) {
-    if(window.DeviceOrientation && 'ontouchstart' in window){
+    if(window.DeviceOrientationEvent && 'ontouchstart' in window){
         movement.x = event.acceleration.x;
         movement.y = event.acceleration.y;
         movement.z = event.acceleration.z;
@@ -182,7 +191,7 @@ function setQuizGame(state){
             var tr = document.createElement('tr');
 
             var td = document.createElement('td');
-            td.innerHTML = "answer answer";
+            td.innerHTML = answer;
             if(state.quiz.selected == index) {
                 td.className = 'selected';
             }
@@ -197,5 +206,3 @@ function setQuizGame(state){
     }
     
 }
-
-

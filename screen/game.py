@@ -28,7 +28,6 @@ def play(gameName):
     view.view.setState("loading")
 
     gameState = {}
-    players_movement = []
     ticks = 0
 
     timeStartLoading = time.time()

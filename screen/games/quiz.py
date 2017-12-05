@@ -27,6 +27,8 @@ def init(gameState, players):
 
 def update(gameState, players_movement, lastTick):
 
+    print(players_movement[0]['movement']['x'])
+
     deltaTime = (int(round(time.time() * 1000000)) - lastTick)/1000000
 
     gameState['iteration'] = gameState['iteration'] + 1
