@@ -24,15 +24,28 @@ body {
 	display: none;
 }
 
-.index-page-center {
-    margin: 0;
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+.text-center {
+    text-align: center;
 }
 
+input[type=text] {
+    border: 1px solid #999;
+    border-radius: 20px;
+    padding: 0.5em;
+    width: 40%;
+
+    -webkit-appearance: none;
+}
+
+input[type=submit] {
+    border: 1px solid #999;
+    border-radius: 20px;
+    background-color: lightgrey;
+    padding: 0.5em;
+    width: 40%;
+
+    -webkit-appearance: none;
+}
 .center{
 	position:fixed;
     top: 50%;
