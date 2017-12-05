@@ -2,9 +2,9 @@
 import time, random
 
 interval = 1/1
-max_questions = 5
-time_question = 10
-time_answer = 5
+max_questions = 2
+time_question = 2
+time_answer = 2
 colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
 
 def init(gameState, players):
@@ -26,8 +26,6 @@ def init(gameState, players):
     return gameState
 
 def update(gameState, players_movement, lastTick):
-
-    print(players_movement)
 
     deltaTime = (int(round(time.time() * 1000000)) - lastTick)/1000000
 
@@ -64,28 +62,27 @@ def ended(gameState):
 def getPlayerState(gameState, sid):
     for player in gameState['players']:
         if player['sid'] == sid:
-            playerState = {
-                'backgroundcolor': player['color'],
-            }
-            if gameState['question'] is not {}:
-                if gameState['state'] == 'answer':
-                    playerState['quiz']: {
+            if gameState['state'] == 'answer':
+                return {
+                    'backgroundcolor': player['color'],
+                    'quiz': {
                         'answers': gameState['question']['alternatives'],
                         'selected': player['selected'],
                         'questionnumber': gameState['questions_done'],
                         'totalquestions': max_questions,
                         'correctanswer': gameState['question']['correct']
                     }
-                else:
-                    playerState['quiz']: {
+                }
+            else:
+                return {
+                    'backgroundcolor': player['color'],
+                    'quiz': {
                         'answers': gameState['question']['alternatives'],
                         'selected': player['selected'],
                         'questionnumber': gameState['questions_done'],
                         'totalquestions': max_questions
                     }
-
-
-            return playerState
+                }
     return {}
 
 def getNewQuestion(gameState):
@@ -98,6 +95,7 @@ def getNewQuestion(gameState):
 
     return gameState
 
+#http://www.pubquizarea.com/multiple-choice/general-knowledge-quiz/start/added/32/1/
 quiz = [
     {
         'question': 'Who directed the 1983 film \'ET the Extra-Terrestrial\'?',
