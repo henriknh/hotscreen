@@ -50,9 +50,26 @@ function setIP(ip ,port) {
     socket.on('playerstate', function(playerstate) {
         console.log('playerstate');
         playerstate = JSON.parse(playerstate);
-        console.log(playerstate.backgroundcolor);
-        console.log(playerstate.space.score);
-        setGame(playerstate.space.score , playerstate.backgroundcolor);
+        console.log(playerstate);
+
+        var board = document.getElementById("game");
+        board.innerHTML = "";
+        while (board.firstChild) {
+            board.removeChild(board.firstChild);
+        }
+        
+        if(playerstate.hasOwnProperty('space')){
+            console.log('space');
+            console.log(playerstate.space);
+            setSpaceGame(playerstate);    
+        }
+        else if(playerstate.hasOwnProperty('quiz')){
+            console.log('quiz');
+            console.log(playerstate.quiz);
+
+            setQuizGame(playerstate);
+        }    
+        
     });
 
 }
@@ -107,11 +124,78 @@ function getData(){
 
 function setLobby(position){
     console.log("setlobby");
-    document.getElementById("queue").innerHTML = "Your place in queue is: " + (parseInt(position) + 1);
+    document.getElementById("lobby").innerHTML = "Your place in queue is: " + (parseInt(position) + 1);
 }
-function setGame(score, background){
-    console.log("set score");
-    document.getElementById("body").style.background = background;
-    console.log(document.getElementById("body").style.background);
-    document.getElementById("score").innerHTML = "Your score is: " + score;
+function setSpaceGame(state){
+
+    var board = document.getElementById("game");
+    board.style.backgroundColor = state.backgroundcolor;
+
+    var score = document.createElement('div');
+    score.className = 'score';
+    score.innerHTML = state.space.score;
+    board.appendChild(score);
+
+    //document.getElementById("score").innerHTML = "Your score is: " + state.space.score;
 }
+function setQuizGame(state){
+
+    console.log("hje");
+
+    var board = document.getElementById("game");
+    board.style.backgroundColor = state.backgroundcolor;
+
+    var progress = document.createElement('div');
+    progress.className = 'progress';
+    progress.innerHTML = (state.quiz.questionnumber+1) + '/' + state.quiz.totalquestions;
+    board.appendChild(progress);
+
+    if(state.quiz.hasOwnProperty('correctanswer')){
+        var table = document.createElement('table');
+
+        state.quiz.answers.forEach(function(answer, index){
+
+            var tr = document.createElement('tr');
+
+            var td = document.createElement('td');
+            td.innerHTML = answer;
+            if(state.quiz.correctanswer == index && state.quiz.selected == index) {
+                td.className = 'selected correct';
+            } else if(state.quiz.correctanswer == index) {
+                td.className = 'correct';
+            } else if(state.quiz.selected == index) {
+                td.className = 'selected wrong';
+            }
+            tr.appendChild(td);
+
+            table.appendChild(tr);
+
+        });
+        
+        board.appendChild(table);
+    }   
+    else{
+        var table = document.createElement('table');
+
+        state.quiz.answers.forEach(function(answer, index){
+
+            var tr = document.createElement('tr');
+
+            var td = document.createElement('td');
+            td.innerHTML = "answer answer";
+            if(state.quiz.selected == index) {
+                td.className = 'selected';
+            }
+            tr.appendChild(td);
+
+            table.appendChild(tr);
+
+        });
+        
+        board.appendChild(table);
+
+    }
+    
+}
+
+

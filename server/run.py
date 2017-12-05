@@ -6,7 +6,7 @@ from OpenSSL import SSL
 def start():
 	try:
 		context = ('hotscreen.crt', 'hotscreen.key')
-		app.run(host='0.0.0.0', port=5000, debug = False, ssl_context=context)
+		app.run(host='0.0.0.0', port=5000, debug = False)
 	except Exception:
 		print('Could not start server')
 		raise

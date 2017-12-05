@@ -1,27 +1,65 @@
 @import url('https://fonts.googleapis.com/css?family=Fredoka+One');
 
-body {
-
+body, html {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
     background-color: #a6f1a6;
     font-family: 'Fredoka One', cursive;
+    overflow: hidden;
 
     /*cursor: none;*/
 }
 #lobby {
-	
+	line-height: 100vh;
+    width: 100%;
+    height: 100%;
 }
 #game {
+    width: 100%;
+    height: 100%;
 	display: none;
+}
+#game table {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	font-size: 2em;
+}
+#game table tr {
+	line-height: 15%;
+}
+#game table tr td {
+	white-space: pre;
+	word-wrap: break-word;
+}
+#game table tr .selected {
+	font-weight: bold;
+	font-size: 1.5em;
+	background-color: rgba(255,255,255,0.2);
+}
+#game table tr .wrong {
+	color: red;
+}
+#game table tr .correct {
+	color: green;
 }
 #gameover {
+	line-height: 100vh;
+    width: 100%;
+    height: 100%;
 	display: none;
+	font-size: 3em;
 }
 #loading {
+	line-height: 100vh;
+    width: 100%;
+    height: 100%;
 	display: none;
+	font-size: 3em;
 }
 
 .text-center {
@@ -47,7 +85,6 @@ input[type=submit] {
     -webkit-appearance: none;
 }
 .center{
-	position:fixed;
-    top: 50%;
-    left: 50%;
+	text-align: center;
+	height: 50%;
 }
