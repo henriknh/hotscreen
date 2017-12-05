@@ -2,3 +2,4 @@ flask>=0.12.2
 qrcode>=5.3
 apscheduler>=3.4.0
 requests>=2.18.4
+pyopenssl>=17.5.0

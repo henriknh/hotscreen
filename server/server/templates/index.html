@@ -1,13 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-<script src="{{ url_for('static', filename='index.js') }}"></script>
-<div class="index-page-center">
-  <h2>Welcome</h2>
+<h1 class="text-center" style="font-size: 3em;">Hot Screen</h1>
+<div align="center">
   <form action="{{ url_for('play') }}" method=post>
     <dl>
-      <label>Code:</label>
+      <p class="text-center" style="font-size: 1.2em;">Write your code down below and let's play!</p>
       <p><input type=text name=code></p>
-      <p><input type=submit value=Play></p>
+      <p><input type=submit value=Go!></p>
     </dl>
   </form>
 </div>
