@@ -1,7 +1,7 @@
 
 import time, random
 
-interval = 1/1
+interval = 1/30
 max_questions = 2
 time_question = 2
 time_answer = 2
@@ -31,7 +31,7 @@ def update(gameState, players_movement, lastTick):
 
     gameState['iteration'] = gameState['iteration'] + 1
 
-    gameState['countdown'] = gameState['countdown'] - 1
+    gameState['countdown'] = gameState['countdown'] - 1*interval
 
     if gameState['state'] == 'question' and gameState['countdown'] <= 0:
         gameState['state'] = 'answer'

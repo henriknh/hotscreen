@@ -184,7 +184,7 @@ function renderLoop() {
         } else {
             var quiz_countdown = document.createElement('div');
             quiz_countdown.className = 'answer';
-            quiz_countdown.innerHTML = gameState.countdown;
+            quiz_countdown.innerHTML = parseInt(gameState.countdown);
             board.appendChild(quiz_countdown);
         }
 
