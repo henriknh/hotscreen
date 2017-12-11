@@ -40,10 +40,18 @@ socket.on('lobbystate', function(lobbystate) {
         document.getElementById('game').style.display='none';
         document.getElementById('loading').style.display='none';
         document.getElementById('gameover').style.display='block';
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
     }
 
+    document.getElementById('loadingtips').innerHTLM='';
     gameState = {};
     lastGameState = {};
+});
+
+socket.on('loadingtips', function(loadingtips) {
+    document.getElementById('loadingtips').innerHTLM=loadingtips;
 });
 
 window.onload = function(e){
@@ -84,7 +92,6 @@ socket.on('gamestate', function(gameStateIn) {
     gameStateTick = window.performance.now();
     lastGameState = gameState;
     gameState = JSON.parse(gameStateIn);
-    console.log(gameState);
 });
 
 var fps = 30;
@@ -208,8 +215,8 @@ function renderLoop() {
         board.appendChild(score);
     }
 
-	//window.requestAnimationFrame(renderLoop);
-	window.setTimeout(renderLoop, 1000 / fps);
+    //window.requestAnimationFrame(renderLoop);
+    window.setTimeout(renderLoop, 1000 / fps);
 }
 
 function calcObjectPostion(state1, state2, deltaTimeGameState, timeSinceLastGameStatus) {

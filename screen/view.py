@@ -23,7 +23,7 @@ def broadcast(topic, message, namespace=None, room=None):
 
 class View(object):
 
-    games = ['quiz']
+    games = ['quiz', 'space']
 
     lobby = None
     game = None
@@ -63,15 +63,16 @@ class View(object):
         if self.lobby.isEnough() and self.playing == False:
             self.playing = True
             gameModule = self.games.pop()
-            self.games.append(gameModule)
+            self.games.insert(0, gameModule)
+            print(self.games)
             socketio.start_background_task(game.play, gameModule)
 
     def broadcast(self, topic, message, namespace=None, room=None):
         broadcast(topic, message, namespace, room)
 
     def startFlask(self):
-        if getpass.getuser() == 'hotscreen':
-            self.openBrowser('localhost:5050/lobby')
+        if getpass.getuser() == 'pi' and False:
+            self.openBrowser('localhost:5050')
         socketio.run(app, host='0.0.0.0', port=5050)
 
     def openBrowser(self, url):
