@@ -47,6 +47,7 @@ function socketUIConnect() {
             document.getElementById('game').style.display='none';
             document.getElementById('loading').style.display='none';
             document.getElementById('gameover').style.display='block';
+            setGameOver();
             socket.disconnect();
         }
     });
@@ -133,7 +134,7 @@ function getData(){
 
 function setLobby(position){
     console.log("setlobby");
-    document.getElementById("lobby").innerHTML = "Your place in queue is: " + (parseInt(position) + 1);
+    document.getElementById("lobby").innerHTML = "Place in queue: " + (parseInt(position) + 1);
 }
 function setSpaceGame(state){
 
@@ -149,14 +150,13 @@ function setSpaceGame(state){
 }
 function setQuizGame(state){
 
-    console.log("hje");
 
     var board = document.getElementById("game");
     board.style.backgroundColor = state.backgroundcolor;
 
     var progress = document.createElement('div');
     progress.className = 'progress';
-    progress.innerHTML = (state.quiz.questionnumber+1) + '/' + state.quiz.totalquestions;
+    progress.innerHTML = 'Question '+(state.quiz.questionnumber+1) + ' of ' + state.quiz.totalquestions;
     board.appendChild(progress);
 
     if(state.quiz.hasOwnProperty('correctanswer')){
@@ -203,6 +203,25 @@ function setQuizGame(state){
         
         board.appendChild(table);
 
+    }
+    
+}
+function setGameOver() {
+    var board = document.getElementById("gameover");
+
+    var gameover = document.createElement('h1');
+    gameover.className = 'title';
+    gameover.innerHTML = "Game Over";
+    board.appendChild(gameover);
+
+    var button = document.createElement('button');
+    button.className = 'button';
+    button.innerHTML = "Play again!"
+    board.appendChild(button);
+    button.onclick = function(){
+        board.removeChild(gameover);
+        board.removeChild(button);
+        socketUIConnect();
     }
     
 }
