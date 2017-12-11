@@ -133,7 +133,7 @@ function getData(){
 
 function setLobby(position){
     console.log("setlobby");
-    document.getElementById("lobby").innerHTML = "Your place in queue is: " + (parseInt(position) + 1);
+    document.getElementById("lobby").innerHTML = "Place in queue: " + (parseInt(position) + 1);
 }
 function setSpaceGame(state){
 
@@ -149,7 +149,7 @@ function setSpaceGame(state){
 }
 function setQuizGame(state){
 
-    console.log("hje");
+    console.log("aaaaaaaaaaa");
 
     var board = document.getElementById("game");
     board.style.backgroundColor = state.backgroundcolor;
@@ -191,7 +191,7 @@ function setQuizGame(state){
             var tr = document.createElement('tr');
 
             var td = document.createElement('td');
-            td.innerHTML = answer;
+            td.innerHTML = answer + answer + answer;
             if(state.quiz.selected == index) {
                 td.className = 'selected';
             }
