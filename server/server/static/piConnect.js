@@ -149,7 +149,6 @@ function setSpaceGame(state){
 }
 function setQuizGame(state){
 
-    console.log("aaaaaaaaaaa");
 
     var board = document.getElementById("game");
     board.style.backgroundColor = state.backgroundcolor;
