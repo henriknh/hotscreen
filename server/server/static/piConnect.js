@@ -68,14 +68,14 @@ function socketUIConnect() {
         while (board.firstChild) {
             board.removeChild(board.firstChild);
         }
-        
+
         if(playerstate.hasOwnProperty('space')){
-            setSpaceGame(playerstate);    
+            setSpaceGame(playerstate);
         }
         else if(playerstate.hasOwnProperty('quiz')){
             setQuizGame(playerstate);
-        }    
-        
+        }
+
     });
 }
 
@@ -155,9 +155,9 @@ function setQuizGame(state){
     progress.innerHTML = 'Question '+(state.quiz.questionnumber+1) + ' of ' + state.quiz.totalquestions;
     board.appendChild(progress);
 
-    if(state.quiz.hasOwnProperty('correctanswer')){
-        var table = document.createElement('table');
+    var table = document.createElement('table');
 
+    if(state.quiz.hasOwnProperty('correctanswer')){
         state.quiz.answers.forEach(function(answer, index){
 
             var tr = document.createElement('tr');
@@ -176,12 +176,10 @@ function setQuizGame(state){
             table.appendChild(tr);
 
         });
-        
-        board.appendChild(table);
-    }   
-    else{
-        var table = document.createElement('table');
 
+        board.appendChild(table);
+    }
+    else{
         state.quiz.answers.forEach(function(answer, index){
 
             var tr = document.createElement('tr');
@@ -196,11 +194,11 @@ function setQuizGame(state){
             table.appendChild(tr);
 
         });
-        
+
         board.appendChild(table);
 
     }
-    
+
 }
 function setGameOver() {
     var board = document.getElementById("gameover");
@@ -212,12 +210,12 @@ function setGameOver() {
 
     var button = document.createElement('button');
     button.className = 'button';
-    button.innerHTML = "Play again!"
+    button.innerHTML = "Play again!";
     board.appendChild(button);
     button.onclick = function(){
         board.removeChild(gameover);
         board.removeChild(button);
         socketUIConnect();
-    }
-    
+    };
+
 }
