@@ -24,9 +24,8 @@ function socketUIConnect() {
         console.log('Disconect');
     });
     socket.on('lobbystate', function(lobbystate) {
-        console.log('lobbystate');
-        console.log(lobbystate);
         lobbystate = JSON.parse(lobbystate);
+
         if(lobbystate == "lobby") {
             document.getElementById('lobby').style.display='block';
             document.getElementById('game').style.display='none';
@@ -37,6 +36,12 @@ function socketUIConnect() {
             document.getElementById('game').style.display='block';
             document.getElementById('loading').style.display='none';
             document.getElementById('gameover').style.display='none';
+
+            var board = document.getElementById("game");
+            board.innerHTML = "";
+            while (board.firstChild) {
+                board.removeChild(board.firstChild);
+            }
         } else if (lobbystate == "loading") {
             document.getElementById('lobby').style.display='none';
             document.getElementById('game').style.display='none';
@@ -53,14 +58,10 @@ function socketUIConnect() {
     });
 
     socket.on('queueupdated', function(position) {
-        console.log('queueupdated');
-        console.log(position);
         setLobby(position);
     });
     socket.on('playerstate', function(playerstate) {
-        console.log('playerstate');
         playerstate = JSON.parse(playerstate);
-        console.log(playerstate);
 
         var board = document.getElementById("game");
         board.innerHTML = "";
@@ -69,14 +70,9 @@ function socketUIConnect() {
         }
         
         if(playerstate.hasOwnProperty('space')){
-            console.log('space');
-            console.log(playerstate.space);
             setSpaceGame(playerstate);    
         }
         else if(playerstate.hasOwnProperty('quiz')){
-            console.log('quiz');
-            console.log(playerstate.quiz);
-
             setQuizGame(playerstate);
         }    
         
