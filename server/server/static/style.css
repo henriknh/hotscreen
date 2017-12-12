@@ -55,11 +55,25 @@ body, html {
 	display: none;
 	font-size: 3em;
 }
-#gameover .button{
+#gameover .title{
     margin: 5px;
-    padding: 10px;
     text-align: center;
+    color: black;
     font-size: 1.5em;
+}
+
+#gameover .button{
+    margin: 5%;
+    padding: 5%;
+    background-color: #4CAF50; /* Green */
+    border-radius: 12px;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.5em;
+    font-family: 'Fredoka One', cursive;
+    border: none;
 }
 #loading {
 	line-height: 100vh;
