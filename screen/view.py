@@ -4,6 +4,7 @@ eventlet.monkey_patch()
 
 import game
 import lobby
+from registration import *
 
 from flask import Flask, render_template, request
 from selenium import webdriver
@@ -27,12 +28,15 @@ class View(object):
 
     lobby = None
     game = None
+    reg = None
     state = 'lobby'
     playing = False
+    port = 5050
 
     def __init__(self):
         self.game = game.Game(self)
         self.lobby = lobby.Lobby(self)
+        self.reg = Registration()
 
     def getState(self):
         return self.state
@@ -56,6 +60,12 @@ class View(object):
     def getGame(self):
         return self.game
 
+    def getRegistration(self):
+        return self.reg
+
+    def getPort(self):
+        return self.port
+
     def getSocketIO(self):
         return socketio
 
@@ -69,10 +79,12 @@ class View(object):
     def broadcast(self, topic, message, namespace=None, room=None):
         broadcast(topic, message, namespace, room)
 
-    def startFlask(self):
+    def startFlask(self, port):
+        self.port = port
         if getpass.getuser() == 'hotscreen':
-            self.openBrowser('localhost:5050/lobby')
-        socketio.run(app, host='0.0.0.0', port=5050)
+            self.openBrowser('localhost:'+port+'/lobby')
+        self.reg.register(self.port)
+        socketio.run(app, host='0.0.0.0', port=self.port)
 
     def openBrowser(self, url):
         opts = Options()
@@ -88,5 +100,5 @@ from handlers import handlers
 
 app.register_blueprint(handlers)
 
-view.startFlask()
+view.startFlask(45671)
 #socketio.start_background_task(startFlask)

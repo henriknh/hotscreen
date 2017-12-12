@@ -2,15 +2,14 @@ import json
 from flask import Flask, render_template, redirect
 from . import handlers
 from view import view
-from registration import *
 
-reg = Registration()
-port = 5050
-reg.register(port)
+#reg = Registration()
+#port = 5050
+#reg.register(port)
 
 @handlers.route("/")
 def index():
-    return render_template('index.html', qr=reg.qr, connect_code=reg.code)
+    return render_template('index.html', qr=view.getRegistration().qr, connect_code=view.getRegistration().code, ws_port=view.getPort())
 
 @handlers.route("/heartbeat")
 def heartbeat():

@@ -1,4 +1,4 @@
-var socket = io.connect('ws://localhost:5050/screen');
+var socket = io.connect('ws://localhost:'+ws_port+'/screen');
 //var socket_c = io.connect('ws://localhost:5050/controller');
 
 socket.on('connect', function() {
