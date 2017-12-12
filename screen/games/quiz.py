@@ -1,10 +1,12 @@
 
 import time, random
 
-interval = 1/30
+instruction = "Shake your phone in an upwards or downwards motion to change selected answer"
+
+interval = 1/60
 max_questions = 2
-time_question = 2
-time_answer = 2
+time_question = 10
+time_answer = 3
 colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
 
 def init(gameState, players):
@@ -21,19 +23,33 @@ def init(gameState, players):
 
     gameState['players'] = []
     for index, player in enumerate(players):
-        gameState['players'].append({'sid': player, 'score': 0, 'color': colors[index], 'selected': 0})
+        gameState['players'].append({'sid': player, 'score': 0, 'color': colors[index], 'selected': 0, 'selectCooldown': 0})
 
     return gameState
 
 def update(gameState, players_movement, lastTick):
-
-    print(players_movement[0]['movement']['x'])
 
     deltaTime = (int(round(time.time() * 1000000)) - lastTick)/1000000
 
     gameState['iteration'] = gameState['iteration'] + 1
 
     gameState['countdown'] = gameState['countdown'] - 1*interval
+
+    if gameState['state'] == 'question':
+        for player in gameState['players']:
+            player['selectCooldown'] = player['selectCooldown'] - 1
+            for player_movement in players_movement:
+                if player_movement['sid'] == player['sid']:
+                    if player['selectCooldown'] < 0 and (player_movement['movement']['y'] > 5 or player_movement['movement']['y'] < -5):
+                        if player_movement['movement']['y'] > 5:
+                            player['selected'] = player['selected'] - 1
+                        elif player_movement['movement']['y'] < -5:
+                            player['selected'] = player['selected'] + 1
+                        if player['selected'] < 0:
+                            player['selected'] = 0
+                        if player['selected'] > 3:
+                            player['selected'] = 3
+                        player['selectCooldown'] = 30
 
     if gameState['state'] == 'question' and gameState['countdown'] <= 0:
         gameState['state'] = 'answer'

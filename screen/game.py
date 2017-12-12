@@ -5,8 +5,8 @@ import view
 import time
 
 lobbyCountDown = 3
-minLoadingTime = 2
-gameCountDown = 1
+minLoadingTime = 8
+gameCountDown = 3
 
 ticks = 0
 
@@ -36,6 +36,9 @@ def play(gameName):
     gameModule = __import__(name, fromlist=[''])
 
     loadingTime = time.time() - timeStartLoading
+
+
+    view.broadcast('loadingtips', gameModule.instruction, '/screen')
 
     gameState = gameModule.init(gameState, players)
 

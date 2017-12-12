@@ -1,6 +1,8 @@
 
 import time, random
 
+instruction = "Have your phone in landscape mode and tilt it to turn left or right. Avoid the asteroids!"
+
 interval = 1/10
 colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
 
@@ -13,7 +15,7 @@ def init(gameState, players):
     gameState['background'] = {'color': '#101010'}
 
     gameState['asteroids'] = []
-    for index in range(0, 15):
+    for index in range(0, 10):
         gameState['asteroids'].append(newAsteroid())
 
     player_placement_interval = 100/(len(players)+1)
@@ -70,7 +72,7 @@ def getPlayerState(gameState, sid):
     return {}
 
 def newAsteroid():
-    w = random.randint(4, 8)
+    w = random.randint(4, 10)
     h = random.randint(4, 8)
     if random.uniform(0, 1) < 0.1:
         w = w*3

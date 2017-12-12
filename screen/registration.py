@@ -20,7 +20,6 @@ class Registration(object):
         except IndexError:
             ipaddr = socket.gethostbyname(socket.gethostname())
 
-
         #url = 'http://localhost:5000/register/%s/%d' % (ipaddr, port)
         url = 'http://130.240.5.87:5000/register/%s/%d' % (ipaddr, port)
         r = requests.post(url)
