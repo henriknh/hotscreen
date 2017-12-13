@@ -1,3 +1,5 @@
+
+
 var socket = io.connect('ws://localhost:'+ws_port+'/screen');
 //var socket_c = io.connect('ws://localhost:5050/controller');
 
@@ -297,6 +299,10 @@ socket.on('ping', function(data) {
 
 
 socket.on('countdown', function(countdown) {
+    if (countdown < 4 && countdown >= 0) {
+        document.getElementById("countdown").className = 'animated infinite zoomInDown';
+    }
+
     if(countdown < 0) {
         document.getElementById("countdown").style.display = 'none';
         return;
@@ -322,3 +328,48 @@ setInterval(function(){
 socket_c.on('playerstate', function(playerState) {
     console.log(playerState);
 });*/
+
+socket.on('gameover', function(gameState) {
+  // Tar lista: [[alla spelare], [spelarnas poäng]]
+  var gameState = JSON.parse(gameState);
+
+  colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500'];
+
+  var symbol = "&#x25B2";
+
+  var players = gameState['players'];
+  var tmp = [["p1","p2"], [24, 25]];
+
+  // table
+  var table = document.createElement('table');
+  table.setAttribute("id", "scoreTable");
+  table.style.fontSize = "4pc";
+  //table.style.border = "1px solid black";
+
+  for (var player = 0; player < players.length; player++) { // Row for each player
+    var tr = document.createElement('tr'); // rad
+
+
+    // player (name)
+    var td = document.createElement('td'); // cell
+    tr.appendChild(td);
+    td.innerHTML = symbol;
+    td.style.color = players[player]['color'];
+    //td.style.border = "1px solid black";
+    td.style.width = "10%";
+
+    // player (score)
+    td = document.createElement('td'); // cell
+    tr.appendChild(td);
+    td.innerHTML = players[player]['score'];
+    //td.style.color = players[player]['color'];
+    //td.style.border = "1px solid black";
+
+
+    table.appendChild(tr);
+  }
+
+  table.style.width="100%";
+  document.getElementById('score').appendChild(table);
+  document.getElementById('gameover').style.display='block';
+});
