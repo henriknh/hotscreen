@@ -10,8 +10,8 @@ class Registration(object):
         self.qr = ''
 
     def register(self, port):
-        url = 'http://localhost:5000/register/%d' % (port)
-        #url = 'http://130.240.5.87:5000/register/%d' % (port)
+        #url = 'http://localhost:5000/register/%d' % (port)
+        url = 'http://130.240.5.87:5000/register/%d' % (port)
         r = requests.post(url)
         status_code = r.status_code
         if status_code != 200:
