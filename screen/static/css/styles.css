@@ -210,5 +210,12 @@ html,body {
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 #gameover {
+    font-size: 10pc;
+    text-align: center;
     display: none;
+}
+#gameover #score {
+  position: absolute;
+  left: 30%;
+  width: 40%;
 }

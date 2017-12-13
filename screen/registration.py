@@ -10,18 +10,8 @@ class Registration(object):
         self.qr = ''
 
     def register(self, port):
-
-        ipaddr = ""
-        try:
-            gw = os.popen("ip -4 route show default").read().split()
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect((gw[2], 0))
-            ipaddr = s.getsockname()[0]
-        except IndexError:
-            ipaddr = socket.gethostbyname(socket.gethostname())
-
-        #url = 'http://localhost:5000/register/%s/%d' % (ipaddr, port)
-        url = 'http://130.240.5.87:5000/register/%s/%d' % (ipaddr, port)
+        #url = 'http://localhost:5000/register/%d' % (port)
+        url = 'http://130.240.5.87:5000/register/%d' % (port)
         r = requests.post(url)
         status_code = r.status_code
         if status_code != 200:

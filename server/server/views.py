@@ -71,9 +71,10 @@ def startplaying(ID):
     ip, port = address
     return render_template('play.html', ip=ip, port=port)
 
-@app.route('/register/<string:ip>/<int:port>', methods=['POST'])
+@app.route('/register/<int:port>', methods=['POST'])
 # POST since will add new information to the server, update list of devices
-def register(ip, port):
+def register(port):
+    ip = request.remote_addr
     if request.method == 'POST': # will automatic show 405 error
         address = (ip, port) #should info add to list
         hashID = getHashID(address).upper() # get an ID which depends on the address
