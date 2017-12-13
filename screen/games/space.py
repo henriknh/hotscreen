@@ -3,7 +3,7 @@ import time, random
 
 instruction = "Have your phone in landscape mode and tilt it to turn left or right. Avoid the asteroids!"
 
-interval = 1/10
+interval = 1/30
 colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
 
 

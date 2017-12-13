@@ -3,7 +3,7 @@ import time, random
 
 instruction = "Shake your phone in an upwards or downwards motion to change selected answer"
 
-interval = 1/60
+interval = 1/30
 max_questions = 2
 time_question = 10
 time_answer = 3
