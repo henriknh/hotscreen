@@ -4,8 +4,8 @@ import time, random
 instruction = "Shake your phone in an upwards or downwards motion to change selected answer"
 
 interval = 1/30
-max_questions = 2
-time_question = 10
+max_questions = 5
+time_question = 15
 time_answer = 3
 colors = ['#EE82EE', '#90EE90', '#87CEFA', '#FF4500']
 

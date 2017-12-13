@@ -188,7 +188,8 @@ html,body {
 #loading .loadingtips {
     position: absolute;
     top: 30%;
-    font-size: 2em;
+    width: 100%;
+    font-size: 3em;
     text-align: center;
 }
 #loading .loading_text {

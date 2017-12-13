@@ -4,7 +4,7 @@
 import view
 import time
 
-lobbyCountDown = 3
+lobbyCountDown = 30
 minLoadingTime = 8
 gameCountDown = 3
 
