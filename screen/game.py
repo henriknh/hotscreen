@@ -20,7 +20,7 @@ def play(gameName):
         i+=1
         if lobbyCountDown-i >= 0:
             view.socketio.sleep(1)
-    view.broadcast('countdown', -1, '/screen')
+    #view.broadcast('countdown', -1, '/screen')
 
     view.view.getLobby().fillGame()
     players = view.view.getLobby().getGameQueue()
