@@ -76,8 +76,9 @@ def play(gameName):
 
         ticks = ticks + 1
 
+    view.broadcast('gameover', gameState, '/screen')
     view.view.setState("gameover")
-    view.socketio.sleep(3)
+    view.socketio.sleep(5)
 
     view.view.setState("lobby")
     view.view.setGameOver()
