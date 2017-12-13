@@ -298,24 +298,34 @@ socket.on('ping', function(data) {
 
 socket.on('countdown', function(countdown) {
   var countdownDiv = document.getElementById('countdown');
-    if (countdown < 4 && countdown >= 0) {
-        countdownDiv.className = 'animated infinite zoomInDown';
-    }
 
-    if(countdown < 0) {
+  countdownDiv.className = '';
+  if (countdown < 4) {
+    countdownDiv.className = 'animated infinite zoomIn';
+  }
+
+    /*if(countdown < 0) {
         countdownDiv.style.display = 'none';
         return;
-    }
+    }*/
     if(countdown == 0) {
         countdown = "Go!";
         countdownDiv.style.color = "tomato";
-        setTimeout(function(){
-            document.getElementById("countdown").style.display = 'none';
-        }, 1000);
+        countdownDiv.style.fontSize = "20em";
+        countdownDiv.style.top = "50%";
+    } else {
+      countdownDiv.style.color = "black";
+      countdownDiv.style.fontSize = "10em";
+      countdownDiv.style.top = "65%";
     }
 
-    countdownDiv.style.display = 'block';
     countdownDiv.innerHTML = countdown;
+    countdownDiv.style.display = 'block';
+
+    setTimeout(function(){
+        document.getElementById("countdown").style.display = 'none';
+        countdownDiv.innerHTML = '';
+    }, 900);
 });
 
 socket.on('gameover', function(gameState) {
