@@ -41,7 +41,7 @@ socket.on('lobbystate', function(lobbystate) {
         document.getElementById('gameover').style.display='block';
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+
     }
 
     document.getElementById('loadingtips').innerHTML="";
@@ -317,6 +317,10 @@ socket.on('countdown', function(countdown) {
 });
 
 socket.on('gameover', function(gameState) {
+  var div = document.getElementById('score');
+  while (div.firstChild) {
+      div.removeChild(div.firstChild);
+  }
   // Tar lista: [[alla spelare], [spelarnas poäng]]
   var gameState = JSON.parse(gameState);
 
