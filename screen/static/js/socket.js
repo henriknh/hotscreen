@@ -1,7 +1,4 @@
-
-
 var socket = io.connect('ws://localhost:'+ws_port+'/screen');
-//var socket_c = io.connect('ws://localhost:5050/controller');
 
 socket.on('connect', function() {
     console.log('connect');
@@ -47,13 +44,14 @@ socket.on('lobbystate', function(lobbystate) {
         
     }
 
-    document.getElementById('loadingtips').innerHTLM='';
+    document.getElementById('loadingtips').innerHTML="";
     gameState = {};
     lastGameState = {};
 });
 
 socket.on('loadingtips', function(loadingtips) {
-    document.getElementById('loadingtips').innerHTLM=loadingtips;
+    loadingtips = JSON.parse(loadingtips);
+    document.getElementById('loadingtips').innerHTML=loadingtips.message;
 });
 
 window.onload = function(e){
@@ -317,17 +315,6 @@ socket.on('countdown', function(countdown) {
     document.getElementById("countdown").style.display = 'block';
     document.getElementById("countdown").innerHTML = countdown;
 });
-
-/*function movement() {
-    socket_c.emit('movement', {x: 0, y: 0, z: 0, alpha: 0, beta: Math.sin(window.performance.now()*0.001)*50*-1, gamma: 0});
-}
-setInterval(function(){
-    movement();
-}, 1000/10);
-
-socket_c.on('playerstate', function(playerState) {
-    console.log(playerState);
-});*/
 
 socket.on('gameover', function(gameState) {
   // Tar lista: [[alla spelare], [spelarnas poäng]]

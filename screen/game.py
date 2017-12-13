@@ -38,7 +38,7 @@ def play(gameName):
     loadingTime = time.time() - timeStartLoading
 
 
-    view.broadcast('loadingtips', gameModule.instruction, '/screen')
+    view.broadcast('loadingtips', {'message': gameModule.instruction}, '/screen')
 
     gameState = gameModule.init(gameState, players)
 
