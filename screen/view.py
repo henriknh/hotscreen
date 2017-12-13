@@ -101,5 +101,5 @@ from handlers import handlers
 
 app.register_blueprint(handlers)
 
-view.startFlask(45671)
+view.startFlask(5050)
 #socketio.start_background_task(startFlask)
