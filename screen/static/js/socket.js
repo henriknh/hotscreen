@@ -1,5 +1,5 @@
-var socket = io.connect('ws://localhost:'+ws_port+'/screen');
-//var socket_c = io.connect('ws://localhost:5050/controller');
+var socket = io.connect('ws://127.0.0.1:5050/screen');
+//var socket_c = io.connect('ws://127.0.0.1:5050/controller');
 
 socket.on('connect', function() {
     console.log('connect');
@@ -45,13 +45,14 @@ socket.on('lobbystate', function(lobbystate) {
         
     }
 
-    document.getElementById('loadingtips').innerHTLM='';
+    document.getElementById('loadingtips').innerHTML="";
     gameState = {};
     lastGameState = {};
 });
 
 socket.on('loadingtips', function(loadingtips) {
-    document.getElementById('loadingtips').innerHTLM=loadingtips;
+    loadingtips = JSON.parse(loadingtips);
+    document.getElementById('loadingtips').innerHTML=loadingtips.message;
 });
 
 window.onload = function(e){

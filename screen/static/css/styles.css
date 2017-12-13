@@ -185,6 +185,12 @@ html,body {
 #loading {
     display: none;
 }
+#loading .loadingtips {
+    position: absolute;
+    top: 30%;
+    font-size: 2em;
+    text-align: center;
+}
 #loading .loading_text {
     position: absolute;
     bottom: 0;
