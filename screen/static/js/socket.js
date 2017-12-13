@@ -297,23 +297,25 @@ socket.on('ping', function(data) {
 
 
 socket.on('countdown', function(countdown) {
+  var countdownDiv = document.getElementById('countdown');
     if (countdown < 4 && countdown >= 0) {
-        document.getElementById("countdown").className = 'animated infinite zoomInDown';
+        countdownDiv.className = 'animated infinite zoomInDown';
     }
 
     if(countdown < 0) {
-        document.getElementById("countdown").style.display = 'none';
+        countdownDiv.style.display = 'none';
         return;
     }
     if(countdown == 0) {
         countdown = "Go!";
+        countdownDiv.style.color = "tomato";
         setTimeout(function(){
             document.getElementById("countdown").style.display = 'none';
         }, 1000);
     }
 
-    document.getElementById("countdown").style.display = 'block';
-    document.getElementById("countdown").innerHTML = countdown;
+    countdownDiv.style.display = 'block';
+    countdownDiv.innerHTML = countdown;
 });
 
 socket.on('gameover', function(gameState) {
